@@ -1,0 +1,82 @@
+//Produk============================================================
+
+//ATT---------------------------------------------------------------
+Table farmasi_pr_jenis{
+  id bigint         [pk, increment]
+  nama varchar      [not null]
+  keterangan text
+
+  id_author bigint     [default: null]
+  id_editor bigint     [default: null]
+  created_at timestamp [default: null, null]
+  updated_at timestamp [default: null, null]
+}
+
+Table farmasi_pr_satuan{
+  id bigint         [pk, increment]
+  nama varchar      [not null]
+  keterangan text   [null]
+
+  id_author bigint     [default: null]
+  id_editor bigint     [default: null]
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
+
+Table farmasi_pr_kategori{
+  id bigint         [pk, increment]
+  nama varchar     [not null]
+  keterangan text  [default: 'hallo']
+
+  id_author bigint     [default: null]
+  id_editor bigint     [default: null]
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null,default: null]
+}
+
+
+Table farmasi_pr_produk_kategori{
+  id bigint         [pk, increment]
+  id_produk   bigint
+  id_kategori bigint
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null,default: null]
+}
+
+Ref: users.id < farmasi_pr_jenis.id_author    [delete: set null]
+Ref: users.id < farmasi_pr_jenis.id_editor    [delete: set null]
+
+Ref: users.id < farmasi_pr_satuan.id_author   [delete: set null]
+Ref: users.id < farmasi_pr_satuan.id_editor   [delete: set null]
+
+Ref: users.id < farmasi_pr_kategori.id_author [delete: set null]
+Ref: users.id < farmasi_pr_kategori.id_editor [delete: set null]
+
+Ref: "farmasi_pr_produk"."id" < "farmasi_pr_produk_kategori"."id_produk"     [delete: cascade]
+Ref: "farmasi_pr_kategori"."id" < "farmasi_pr_produk_kategori"."id_kategori" [delete: cascade]
+//ATT---------------------------------------------------------------
+
+
+Table farmasi_pr_produk{
+  id bigint               [pk, increment]
+  nama varchar           [not null]
+  barcode varchar        [null, unique]  
+  keterangan text         [null]
+
+  harga decimal(15,2)     [null, default: 0.0]
+  diskon decimal(5, 2)    [null, default: 0.0]
+  ppn decimal(4, 2)       [null, default: 11.0]
+
+  jumlah_satuan_kecil integer  [null, default: 1]
+  status boolean          [not null, default: true]
+
+  id_jenis bigint        [default: null]
+  id_satuan_kecil bigint [default: null]
+  id_satuan_beasr bigint [default: null]
+}
+Ref: farmasi_pr_jenis.id < farmasi_pr_produk.id_jenis         [delete: set null]
+Ref: farmasi_pr_satuan.id < farmasi_pr_produk.id_satuan_kecil [delete: set null]
+Ref: farmasi_pr_satuan.id < farmasi_pr_produk.id_satuan_beasr [delete: set null]
+
+
+//Produk============================================================
