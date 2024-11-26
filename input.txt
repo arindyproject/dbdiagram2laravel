@@ -25,14 +25,17 @@ Table farmasi_pr_satuan{
 
 Table farmasi_pr_kategori{
   id bigint         [pk, increment]
-  nama varchar     [not null]
-  keterangan text  [default: 'hallo']
+  nama varchar      [not null]
+  keterangan text   [default: 'hallo']
+  status boolean    [default: true]
+  harga decimal     [default: 1000.00]
 
-  id_author bigint     [default: null]
-  id_editor bigint     [default: null]
+  id_author bigint     [default: 1]
+  id_editor bigint     [default: 2]
   created_at timestamp [null, default: null]
   updated_at timestamp [null,default: null]
 }
+///srewr
 
 
 Table farmasi_pr_produk_kategori{
@@ -64,8 +67,8 @@ Table farmasi_pr_produk{
   keterangan text         [null]
 
   harga decimal(15,2)     [null, default: 0.0]
-  diskon decimal(5, 2)    [null, default: 0.0]
-  ppn decimal(4, 2)       [null, default: 11.0]
+  diskon decimal(5,2)    [null, default: 0.0]
+  ppn decimal(4,2)       [null, default: 11.0]
 
   jumlah_satuan_kecil integer  [null, default: 1]
   status boolean          [not null, default: true]
