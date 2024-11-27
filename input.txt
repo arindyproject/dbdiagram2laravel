@@ -19,6 +19,7 @@ Table ktp{
 Table jenis{
   id bigint [pk, increment]
   name varchar
+  id_author bigint 
 }
 
 Table kelompok{
@@ -36,4 +37,6 @@ Ref: "kelamin"."id" < "users"."id_kelamin" [delete: set null]
 
 Ref: "kelompok"."id_user" > "users"."id" [delete: cascade]
 
-Ref: "jenis"."id" < "kelompok"."id_jenis" 
+Ref: "jenis"."id" < "kelompok"."id_jenis"
+
+Ref: "users"."id" < "jenis"."id_author" [delete: set null]

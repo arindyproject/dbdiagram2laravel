@@ -1,4 +1,4 @@
-import json
+import json, os
 ## > many-to-one; < one-to-many; - one-to-one; <> many-to-many
 class MetaToSql:
     def __init__(self, json_data):
@@ -98,9 +98,16 @@ class MetaToSql:
 
     def process_and_save(self, file_name="output.sql"):
         """
-        Memproses JSON untuk semua tabel dan menyimpannya ke file.
+        Memproses JSON untuk semua tabel dan menyimpannya ke folder 'out'.
         :param file_name: Nama file output.
         """
+        # Buat folder 'out' jika belum ada
+        output_dir = "out"
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Path lengkap untuk file output
+        output_path = os.path.join(output_dir, file_name)
+        
         sql_queries = []
 
         # Proses CREATE TABLE
@@ -116,6 +123,7 @@ class MetaToSql:
         final_sql = "\n\n".join(sql_queries)
 
         # Simpan ke file
-        with open(file_name, "w") as file:
+        with open(output_path, "w") as file:
             file.write(final_sql)
-        print(f"SQL berhasil disimpan di {file_name}")
+        
+        print(f"SQL berhasil disimpan di {output_path}")

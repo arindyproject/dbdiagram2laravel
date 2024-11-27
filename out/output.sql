@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS ktp (
 CREATE TABLE IF NOT EXISTS jenis (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(255) NULL,
+  id_author bigint UNSIGNED NULL,
   PRIMARY KEY (id)
 );
 
@@ -35,3 +36,4 @@ ALTER TABLE `ktp` ADD FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CAS
 ALTER TABLE `users` ADD FOREIGN KEY (`id_kelamin`) REFERENCES `kelamin` (`id`) ON DELETE SET NULL;
 ALTER TABLE `kelompok` ADD FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 ALTER TABLE `kelompok` ADD FOREIGN KEY (`id_jenis`) REFERENCES `jenis` (`id`);
+ALTER TABLE `jenis` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;

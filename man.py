@@ -1,5 +1,6 @@
-from DiagramToMeta import DiagramToMeta
-from MetaToSql import MetaToSql
+from meta.DiagramToMeta import DiagramToMeta
+from meta.MetaToSql import MetaToSql
+from meta.MetaToModel import MetaToModel
 
 import argparse
 import json
@@ -8,7 +9,7 @@ import json
 def main():
     parser = argparse.ArgumentParser(description="Process metadata and generate SQL or models.")
     parser.add_argument("-i", "--input", required=True, help="Input file containing JSON metadata.")
-    parser.add_argument("-m", "--mode", required=True, choices=["mysql", "migrate", "model"], help="Mode of operation.")
+    parser.add_argument("-m", "--mode", required=True, choices=["mysql", "sql", "migrate", "model"], help="Mode of operation.")
     
     args = parser.parse_args()
 
@@ -23,13 +24,14 @@ def main():
         return
 
     # Handle the specified mode
-    if args.mode == "mysql":
+    if args.mode == "mysql" or args.mode == "sql":
         converter = MetaToSql(result)
         converter.process_and_save("output.sql")
     elif args.mode == "migrate":
         print("Migrate mode is under development.")
     elif args.mode == "model":
-        print("Model mode is under development.")
+        converter = MetaToModel(result)
+        converter.process_and_save()
     else:
         print("Invalid mode selected.")
 

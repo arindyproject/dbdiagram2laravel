@@ -45,7 +45,8 @@ class DiagramToMeta:
 
     def clean_table(self, table):
         """
-        Membersihkan tabel dari komentar dan teks tambahan setelah '}'
+        Membersihkan tabel dari komentar dan teks tambahan setelah '}'.
+        Menjaga komentar yang dimulai dengan '//dir:'.
         """
         cleaned_lines = []
         inside_table = False
@@ -53,7 +54,8 @@ class DiagramToMeta:
         for line in table.splitlines():
             if line.startswith("Table"):
                 inside_table = True
-            if line.startswith("//") and inside_table:
+            # Lewati semua komentar kecuali yang dimulai dengan '//dir:'
+            if line.startswith("//") and not line.startswith("//dir:") and inside_table:
                 continue
             cleaned_lines.append(line)
 
@@ -124,37 +126,42 @@ class DiagramToMeta:
 
         table_name = lines[0].split()[-1].replace('{', '')
         items_field = []
-
+        dir = ""
         for line in lines[1:-1]:
+            
             items = [item for item in line.split() if item]
-            tmp = {
-                'name': items[0],
-                'type': self.ck_type(items[1]),
-                'null': len(items) < 3,
-                'increment': False,
-                'attributes': ''
-            }
+            if(items[0] == '//dir:'):
+                dir = items[1]
+            else:
+                tmp = {
+                    'name': items[0],
+                    'type': self.ck_type(items[1]),
+                    'null': len(items) < 3,
+                    'increment': False,
+                    'attributes': ''
+                }
 
-            if 'id_' in items[0] or '_id' in items[0]:
-                tmp['attributes'] = 'UNSIGNED'
+                if 'id_' in items[0] or '_id' in items[0]:
+                    tmp['attributes'] = 'UNSIGNED'
 
-            match = re.search(r"\[(.*?)\]", line)
-            if match:
-                result = re.split(r",\s*", match.group(1))
-                tmp['increment'] = self.ck_is_increment(result)
-                tmp['primary'] = self.ck_is_primary(result)
-                tmp['null'] = self.ck_is_null(result)
-                if tmp['primary']:
-                    tmp['attributes'] = "UNSIGNED"
-                    tmp['null'] = False
+                match = re.search(r"\[(.*?)\]", line)
+                if match:
+                    result = re.split(r",\s*", match.group(1))
+                    tmp['increment'] = self.ck_is_increment(result)
+                    tmp['primary'] = self.ck_is_primary(result)
+                    tmp['null'] = self.ck_is_null(result)
+                    if tmp['primary']:
+                        tmp['attributes'] = "UNSIGNED"
+                        tmp['null'] = False
 
-                d_sts, d_val = self.ck_default(result)
-                if d_sts:
-                    tmp['default'] = d_val
+                    d_sts, d_val = self.ck_default(result)
+                    if d_sts:
+                        tmp['default'] = d_val
 
-            items_field.append(tmp)
+                items_field.append(tmp)
 
         result = {
+            'dir'  : dir,
             'table': table_name,
             'items': items_field
         }
@@ -210,7 +217,6 @@ class DiagramToMeta:
         """
         Menggabungkan hasil tabel dan referensi menjadi metadata JSON.
         """
-
         return {
             'tabels': self.get_tabels(),
             'refs'  : self.get_refs()
