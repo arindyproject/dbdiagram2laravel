@@ -1,6 +1,9 @@
 import json
 import re
 
+import json
+import re
+
 class DiagramToMeta:
     def __init__(self, text_input):
         """
@@ -11,12 +14,11 @@ class DiagramToMeta:
             raise ValueError("Input harus berupa string teks.")
         self.text_input = text_input
 
-    @staticmethod
-    def split_tabel_ref(text):
+    def split_tabel_ref(self):
         """
         Memisahkan tabel dan referensi dari teks diagram.
         """
-        lines = text.strip().splitlines()
+        lines = self.text_input.strip().splitlines()
         tables = []
         refs = []
         current_table = []
@@ -26,7 +28,7 @@ class DiagramToMeta:
                 line = line.strip()
                 if line.startswith("Table"):
                     if current_table:
-                        cleaned_table = DiagramToMeta.clean_table("\n".join(current_table))
+                        cleaned_table = self.clean_table("\n".join(current_table))
                         tables.append(cleaned_table)
                         current_table = []
                     current_table.append(line)
@@ -36,13 +38,12 @@ class DiagramToMeta:
                     current_table.append(line)
 
         if current_table:
-            cleaned_table = DiagramToMeta.clean_table("\n".join(current_table))
+            cleaned_table = self.clean_table("\n".join(current_table))
             tables.append(cleaned_table)
 
         return tables, refs
 
-    @staticmethod
-    def clean_table(table):
+    def clean_table(self, table):
         """
         Membersihkan tabel dari komentar dan teks tambahan setelah '}'
         """
@@ -60,8 +61,7 @@ class DiagramToMeta:
         cleaned_table = re.sub(r"}.*$", "}", cleaned_table)
         return cleaned_table
 
-    @staticmethod
-    def ck_is_null(ls):
+    def ck_is_null(self, ls):
         """
         Mengecek apakah atribut null didefinisikan.
         """
@@ -72,22 +72,27 @@ class DiagramToMeta:
         else:
             return True
 
-    @staticmethod
-    def ck_is_primary(ls):
+    def ck_is_primary(self, ls):
         """
         Mengecek apakah atribut primary key didefinisikan.
         """
         return 'pk' in ls
 
-    @staticmethod
-    def ck_is_increment(ls):
+    def ck_is_increment(self, ls):
         """
         Mengecek apakah atribut auto increment didefinisikan.
         """
         return 'increment' in ls
 
-    @staticmethod
-    def ck_default(ls):
+    def ck_type(self, ty):
+        """
+        Mengecek Type
+        """
+        if ty.lower() == 'varchar':
+            return ty + "(255)"
+        return ty
+
+    def ck_default(self, ls):
         """
         Mengecek dan mengekstrak nilai default.
         """
@@ -109,8 +114,7 @@ class DiagramToMeta:
                     return True, value
         return False, None
 
-    @staticmethod
-    def extract_table(table):
+    def extract_table(self, table):
         """
         Mengekstrak metadata tabel dari teks diagram.
         """
@@ -125,7 +129,7 @@ class DiagramToMeta:
             items = [item for item in line.split() if item]
             tmp = {
                 'name': items[0],
-                'type': items[1],
+                'type': self.ck_type(items[1]),
                 'null': len(items) < 3,
                 'increment': False,
                 'attributes': ''
@@ -137,14 +141,14 @@ class DiagramToMeta:
             match = re.search(r"\[(.*?)\]", line)
             if match:
                 result = re.split(r",\s*", match.group(1))
-                tmp['increment'] = DiagramToMeta.ck_is_increment(result)
-                tmp['primary'] = DiagramToMeta.ck_is_primary(result)
-                tmp['null'] = DiagramToMeta.ck_is_null(result)
+                tmp['increment'] = self.ck_is_increment(result)
+                tmp['primary'] = self.ck_is_primary(result)
+                tmp['null'] = self.ck_is_null(result)
                 if tmp['primary']:
                     tmp['attributes'] = "UNSIGNED"
                     tmp['null'] = False
 
-                d_sts, d_val = DiagramToMeta.ck_default(result)
+                d_sts, d_val = self.ck_default(result)
                 if d_sts:
                     tmp['default'] = d_val
 
@@ -161,6 +165,53 @@ class DiagramToMeta:
         """
         Memproses teks diagram Tabel menjadi metadata JSON.
         """
-        tables, refs = self.split_tabel_ref(self.text_input)
+        tables, _ = self.split_tabel_ref()
         metadata = [self.extract_table(table) for table in tables]
-        return json.dumps(metadata, indent=4)
+        return metadata
+    
+    def get_refs(self):
+        """
+        Memproses teks diagram Refs menjadi metadata JSON.
+        """
+        refs = []
+        _, lines = self.split_tabel_ref()
+        
+        for line in lines:
+            # Menghapus komentar yang diawali dengan `//`
+            line = re.sub(r"//.*$", "", line).strip()
+            
+            # Regex untuk menangkap elemen-elemen referensi dengan operator tambahan seperti `<>`
+            match = re.match(
+                r'Ref:\s*"([^"]+)"\."([^"]+)"\s*(<|>|-|<>)\s*"([^"]+)"\."([^"]+)"\s*(?:\[(.*?)\])?',
+                line
+            )
+            if match:
+                tb1_name, tb1_ref, operator, tb2_name, tb2_ref, attributes = match.groups()
+                attributes_dict = {}
+
+                # Memproses atribut seperti `delete` dan `update` jika ada
+                if attributes:
+                    for attr in attributes.split(','):
+                        key_value = attr.strip().split(':')
+                        if len(key_value) == 2:
+                            key, value = key_value
+                            attributes_dict[key.strip()] = value.strip()
+
+                # Menambahkan hasil dalam format JSON
+                refs.append({
+                    "tb1": {"name": tb1_name, "ref": tb1_ref},
+                    "tb2": {"name": tb2_name, "ref": tb2_ref},
+                    "mark": operator,
+                    "att": attributes_dict
+                })
+        return refs
+    
+    def get_all(self):
+        """
+        Menggabungkan hasil tabel dan referensi menjadi metadata JSON.
+        """
+
+        return {
+            'tabels': self.get_tabels(),
+            'refs'  : self.get_refs()
+        }

@@ -1,5 +1,5 @@
 import json
-
+## > many-to-one; < one-to-many; - one-to-one; <> many-to-many
 class MetaToSql:
     def __init__(self, json_data):
         """
@@ -8,7 +8,7 @@ class MetaToSql:
         """
         if isinstance(json_data, str):
             self.json_data = json.loads(json_data)
-        elif isinstance(json_data, list):  # Sesuaikan jika data berupa list
+        elif isinstance(json_data, dict):  # Sesuaikan jika data berupa list
             self.json_data = json_data
         else:
             raise ValueError("Input harus berupa string JSON atau list dictionary.")
@@ -22,7 +22,7 @@ class MetaToSql:
         columns = table_data["items"]
 
         # Mulai query CREATE TABLE
-        sql = f"CREATE TABLE {table_name} (\n"
+        sql = f"CREATE TABLE IF NOT EXISTS {table_name} (\n"
 
         column_definitions = []
         for col in columns:
@@ -67,14 +67,50 @@ class MetaToSql:
 
         return sql
 
+    def json_to_alter(self, json_data):
+        sql_statements = []
+
+        for ref in json_data:
+            tb1 = ref['tb1']
+            tb2 = ref['tb2']
+            mark = ref['mark']
+            att = ref.get('att', {})
+
+            # Menentukan aksi ON DELETE
+            on_delete = f" ON DELETE {att['delete'].upper()}" if 'delete' in att else ""
+            on_update = f" ON UPDATE {att['update'].upper()}" if 'update' in att else ""
+
+            # Menentukan perintah ALTER TABLE berdasarkan arah referensi
+            if mark in ["<", ">"]:  # Foreign key relationship
+                table = tb2['name'] if mark == "<" else tb1['name']
+                column = tb2['ref'] if mark == "<" else tb1['ref']
+                ref_table = tb1['name'] if mark == "<" else tb2['name']
+                ref_column = tb1['ref'] if mark == "<" else tb2['ref']
+
+                sql = f"ALTER TABLE `{table}` ADD FOREIGN KEY (`{column}`) REFERENCES `{ref_table}` (`{ref_column}`){on_delete}{on_update};"
+                sql_statements.append(sql)
+
+            elif mark == "-":  # Bi-directional (assumed as a single direction for SQL FK)
+                sql = f"ALTER TABLE `{tb2['name']}` ADD FOREIGN KEY (`{tb2['ref']}`) REFERENCES `{tb1['name']}` (`{tb1['ref']}`){on_delete}{on_update};"
+                sql_statements.append(sql)
+
+        return "\n".join(sql_statements)
+
     def process_and_save(self, file_name="output.sql"):
         """
         Memproses JSON untuk semua tabel dan menyimpannya ke file.
         :param file_name: Nama file output.
         """
         sql_queries = []
-        for table_data in self.json_data:
+
+        # Proses CREATE TABLE
+        for table_data in self.json_data['tabels']:
             sql_queries.append(self.json_to_mysql(table_data))
+        
+        # Proses ALTER TABLE
+        alter_queries = self.json_to_alter(self.json_data['refs'])
+        if alter_queries:
+            sql_queries.append(alter_queries)
         
         # Gabungkan semua query menjadi satu string
         final_sql = "\n\n".join(sql_queries)
