@@ -22,17 +22,17 @@ Class Customer extends Model {
 
     //customer - kartu 
     public function kartu(): hasOne { 
-        return $this->hasOne(Kartu::class );
+        return $this->hasOne('App\Models\Kasir\Kartu' );
     }
 
     //users < customer 
     public function author(): belongsTo { 
-        return $this->belongsTo(Users::class ,'id_author');
+        return $this->belongsTo('App\Models\User' ,'id_author');
     }
 
     //customer < transaksi 
     public function transaksi(): hasMany { 
-        return $this->hasMany(Transaksi::class );
+        return $this->hasMany('App\Models\Kasir\Transaksi' );
     }
 
 } 

@@ -22,7 +22,15 @@ class MetaToModel:
         if not input_text:
             return ""
         # Pecah teks berdasarkan underscore (_), kapitalisasi setiap kata, lalu gabungkan
+        if(input_text.lower() == 'users'):
+            return "User"
         return ''.join(word.capitalize() for word in input_text.split('_'))
+    
+    def get_class_rel_dir(self, table_data, table_name):
+        for i in table_data:
+            if(i['table'] == table_name):
+                return "App\Models\\" + ( i['dir'] + "\\" ) if i['dir'] else ""
+        return "App\Models\\"
     
 
     def json_to_model(self, table_data, refs_data):
@@ -61,6 +69,7 @@ class MetaToModel:
                 rela      = ""
                 class_rel = ""
                 class_ref = ""
+                class_dir = ""
                 if(i['mark'] == '-'): #one-to-one
                     if(i["tb1"]["name"] != table_name):
                         seleted = i["tb1"]
@@ -69,33 +78,38 @@ class MetaToModel:
                     name_func   = seleted['name']
                     rela        = "hasOne"
                     class_rel   = self.ubah_nama(name_func)
+                    class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                 elif(i['mark'] == '<'): #< one-to-many
                     seleted = i["tb2"]
                     if seleted['name'] != table_name :
                         name_func = seleted['name']
                         rela      = "hasMany"
                         class_rel = self.ubah_nama(name_func)
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                     else:
                         name_func = seleted['ref'].replace('id_', '').replace('_id', '')
                         rela      = "belongsTo"
                         class_rel = self.ubah_nama(i["tb1"]['name'])
                         class_ref = seleted['ref']
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                 elif(i['mark'] == '>'): #< many-to-one
                     seleted = i["tb1"]
                     if seleted['name'] != table_name :
                         name_func = seleted['name']
                         rela      = "hasMany"
                         class_rel = self.ubah_nama(name_func)
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                     else:
                         name_func = seleted['ref'].replace('id_', '').replace('_id', '')
                         rela      = "belongsTo"
                         class_rel = self.ubah_nama(i["tb2"]['name'])
                         class_ref = seleted['ref']
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                 #-----------------------------------------       
                 class_ref = "," + "'" +class_ref + "'" if  class_ref else ''    
                 mod += f"    //{i['tb1']['name']} {i['mark']} {i['tb2']['name']} \n"
                 mod += "    public function " + name_func + "(): "+rela+" { \n"
-                mod += f"        return $this->{rela}({class_rel + '::class'} {class_ref});\n"
+                mod += f"        return $this->{rela}('{ class_dir + class_rel}' {class_ref});\n"
                 mod += "    }\n\n"
                 
         #-------------------------------------------------

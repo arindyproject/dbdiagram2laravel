@@ -26,22 +26,22 @@ Class Produk extends Model {
 
     //users < produk 
     public function author(): belongsTo { 
-        return $this->belongsTo(Users::class ,'id_author');
+        return $this->belongsTo('App\Models\User' ,'id_author');
     }
 
     //jenis < produk 
     public function jenis(): belongsTo { 
-        return $this->belongsTo(Jenis::class ,'id_jenis');
+        return $this->belongsTo('App\Models\Kasir\Jenis' ,'id_jenis');
     }
 
     //satuan < produk 
     public function satuan(): belongsTo { 
-        return $this->belongsTo(Satuan::class ,'id_satuan');
+        return $this->belongsTo('App\Models\Kasir\Satuan' ,'id_satuan');
     }
 
     //produk < transaksi_items 
     public function transaksi_items(): hasMany { 
-        return $this->hasMany(TransaksiItems::class );
+        return $this->hasMany('App\Models\Kasir\TransaksiItems' );
     }
 
 } 

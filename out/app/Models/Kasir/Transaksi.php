@@ -20,17 +20,17 @@ Class Transaksi extends Model {
 
     //customer < transaksi 
     public function customer(): belongsTo { 
-        return $this->belongsTo(Customer::class ,'id_customer');
+        return $this->belongsTo('App\Models\Kasir\Customer' ,'id_customer');
     }
 
     //users < transaksi 
     public function kasir(): belongsTo { 
-        return $this->belongsTo(Users::class ,'id_kasir');
+        return $this->belongsTo('App\Models\User' ,'id_kasir');
     }
 
     //transaksi < transaksi_items 
     public function transaksi_items(): hasMany { 
-        return $this->hasMany(TransaksiItems::class );
+        return $this->hasMany('App\Models\Kasir\TransaksiItems' );
     }
 
 } 

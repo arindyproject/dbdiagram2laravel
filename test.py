@@ -11,4 +11,4 @@ result = diagram_to_meta.get_all()
 mtm = MetaToModel(result)
 mtm.process_and_save()
 
-##print(json.dumps(result, indent=4) )
+#print(json.dumps(result, indent=4) )

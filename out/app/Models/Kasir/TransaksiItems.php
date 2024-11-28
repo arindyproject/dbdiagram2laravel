@@ -22,12 +22,12 @@ Class TransaksiItems extends Model {
 
     //produk < transaksi_items 
     public function produk(): belongsTo { 
-        return $this->belongsTo(Produk::class ,'id_produk');
+        return $this->belongsTo('App\Models\Kasir\Produk' ,'id_produk');
     }
 
     //transaksi < transaksi_items 
     public function transaksi(): belongsTo { 
-        return $this->belongsTo(Transaksi::class ,'id_transaksi');
+        return $this->belongsTo('App\Models\Kasir\Transaksi' ,'id_transaksi');
     }
 
 } 

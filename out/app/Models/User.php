@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; 
 use Illuminate\Database\Eloquent\Relations\HasMany; 
 
-Class Users extends Model { 
+Class User extends Model { 
     use HasFactory; 
     protected $table = 'users'; 
     protected $fillable = [ 
@@ -19,27 +19,27 @@ Class Users extends Model {
 
     //users < jenis 
     public function jenis(): hasMany { 
-        return $this->hasMany(Jenis::class );
+        return $this->hasMany('App\Models\Kasir\Jenis' );
     }
 
     //users < satuan 
     public function satuan(): hasMany { 
-        return $this->hasMany(Satuan::class );
+        return $this->hasMany('App\Models\Kasir\Satuan' );
     }
 
     //users < produk 
     public function produk(): hasMany { 
-        return $this->hasMany(Produk::class );
+        return $this->hasMany('App\Models\Kasir\Produk' );
     }
 
     //users < customer 
     public function customer(): hasMany { 
-        return $this->hasMany(Customer::class );
+        return $this->hasMany('App\Models\Kasir\Customer' );
     }
 
     //users < transaksi 
     public function transaksi(): hasMany { 
-        return $this->hasMany(Transaksi::class );
+        return $this->hasMany('App\Models\Kasir\Transaksi' );
     }
 
 } 

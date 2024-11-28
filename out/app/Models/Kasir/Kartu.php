@@ -20,7 +20,7 @@ Class Kartu extends Model {
 
     //customer - kartu 
     public function customer(): hasOne { 
-        return $this->hasOne(Customer::class );
+        return $this->hasOne('App\Models\Kasir\Customer' );
     }
 
 } 

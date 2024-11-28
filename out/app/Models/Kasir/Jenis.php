@@ -20,12 +20,12 @@ Class Jenis extends Model {
 
     //users < jenis 
     public function author(): belongsTo { 
-        return $this->belongsTo(Users::class ,'id_author');
+        return $this->belongsTo('App\Models\User' ,'id_author');
     }
 
     //jenis < produk 
     public function produk(): hasMany { 
-        return $this->hasMany(Produk::class );
+        return $this->hasMany('App\Models\Kasir\Produk' );
     }
 
 } 
