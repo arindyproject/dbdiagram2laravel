@@ -3,6 +3,10 @@
 namespace App\Models; 
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Relations\HasOne; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo; 
+use Illuminate\Database\Eloquent\Relations\HasMany; 
+
 Class Ktp extends Model { 
     use HasFactory; 
     protected $table = 'ktp'; 
@@ -10,5 +14,10 @@ Class Ktp extends Model {
         "id", 
         "nik", 
     ]; 
-users - ktp 
+
+    //users - ktp 
+    public function users(): hasOne { 
+        return $this->hasOne(Users::class );
+    }
+
 } 

@@ -37,21 +37,66 @@ class MetaToModel:
         mod+= f'namespace App\Models{dir}; \n'
         mod+= f'use Illuminate\Database\Eloquent\Factories\HasFactory; \n'
         mod+= f'use Illuminate\Database\Eloquent\Model; \n'
+        mod+= f'use Illuminate\Database\Eloquent\Relations\HasOne; \n'
+        mod+= f'use Illuminate\Database\Eloquent\Relations\BelongsTo; \n'
+        mod+= f'use Illuminate\Database\Eloquent\Relations\HasMany; \n\n'
         mod+= 'Class ' + model_name+ ' extends Model { \n'
         mod+= '    use HasFactory; \n'
         mod+= f"    protected $table = '{table_name}'; \n"
-        mod+= '    protected $fillable = [ \n'
+        mod+=  '    protected $fillable = [ \n'
         #-------------------------------------------------
         for i in columns:
             if(i['name'] != 'created_at' or i['name'] != 'updated_at' ):
-                mod +=f'        "{i['name']}", \n'
+                mod +='        "' + i['name'] +'", \n'
 
-        mod+= '    ]; \n'
+        mod+= '    ]; \n\n'
         #-------------------------------------------------
+        #relasi
         #-------------------------------------------------
         for i in refs_data:
-            if(i["tb1"]["name"] == table_name or i["tb2"]["name"] == table_name):
-                mod += f"{i['tb1']['name']} {i['mark']} {i['tb2']['name']} \n"
+            if(i["tb1"]["name"] == table_name or i["tb2"]["name"] == table_name): 
+                #-----------------------------------------  
+                seleted   = ""
+                name_func = ""
+                rela      = ""
+                class_rel = ""
+                class_ref = ""
+                if(i['mark'] == '-'): #one-to-one
+                    if(i["tb1"]["name"] != table_name):
+                        seleted = i["tb1"]
+                    if(i["tb2"]["name"] != table_name):
+                        seleted = i["tb2"]
+                    name_func   = seleted['name']
+                    rela        = "hasOne"
+                    class_rel   = self.ubah_nama(name_func)
+                elif(i['mark'] == '<'): #< one-to-many
+                    seleted = i["tb2"]
+                    if seleted['name'] != table_name :
+                        name_func = seleted['name']
+                        rela      = "hasMany"
+                        class_rel = self.ubah_nama(name_func)
+                    else:
+                        name_func = seleted['ref'].replace('id_', '').replace('_id', '')
+                        rela      = "belongsTo"
+                        class_rel = self.ubah_nama(i["tb1"]['name'])
+                        class_ref = seleted['ref']
+                elif(i['mark'] == '>'): #< many-to-one
+                    seleted = i["tb1"]
+                    if seleted['name'] != table_name :
+                        name_func = seleted['name']
+                        rela      = "hasMany"
+                        class_rel = self.ubah_nama(name_func)
+                    else:
+                        name_func = seleted['ref'].replace('id_', '').replace('_id', '')
+                        rela      = "belongsTo"
+                        class_rel = self.ubah_nama(i["tb2"]['name'])
+                        class_ref = seleted['ref']
+                #-----------------------------------------       
+                class_ref = "," + "'" +class_ref + "'" if  class_ref else ''    
+                mod += f"    //{i['tb1']['name']} {i['mark']} {i['tb2']['name']} \n"
+                mod += "    public function " + name_func + "(): "+rela+" { \n"
+                mod += f"        return $this->{rela}({class_rel + '::class'} {class_ref});\n"
+                mod += "    }\n\n"
                 
         #-------------------------------------------------
         #-------------------------------------------------

@@ -1,7 +1,3 @@
-import json
-import re
-
-import json
 import re
 
 class DiagramToMeta:

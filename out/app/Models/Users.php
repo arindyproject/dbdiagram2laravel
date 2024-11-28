@@ -3,6 +3,10 @@
 namespace App\Models; 
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Relations\HasOne; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo; 
+use Illuminate\Database\Eloquent\Relations\HasMany; 
+
 Class Users extends Model { 
     use HasFactory; 
     protected $table = 'users'; 
@@ -12,8 +16,25 @@ Class Users extends Model {
         "alamat", 
         "id_kelamin", 
     ]; 
-users - ktp 
-kelamin < users 
-kelompok > users 
-users < jenis 
+
+    //users - ktp 
+    public function ktp(): hasOne { 
+        return $this->hasOne(Ktp::class );
+    }
+
+    //kelamin < users 
+    public function kelamin(): belongsTo { 
+        return $this->belongsTo(Kelamin::class ,'id_kelamin');
+    }
+
+    //kelompok > users 
+    public function kelompok(): hasMany { 
+        return $this->hasMany(Kelompok::class );
+    }
+
+    //users < jenis 
+    public function jenis(): hasMany { 
+        return $this->hasMany(Jenis::class );
+    }
+
 } 
