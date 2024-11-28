@@ -17,24 +17,29 @@ Class Users extends Model {
         "id_kelamin", 
     ]; 
 
-    //users - ktp 
-    public function ktp(): hasOne { 
-        return $this->hasOne(Ktp::class );
-    }
-
-    //kelamin < users 
-    public function kelamin(): belongsTo { 
-        return $this->belongsTo(Kelamin::class ,'id_kelamin');
-    }
-
-    //kelompok > users 
-    public function kelompok(): hasMany { 
-        return $this->hasMany(Kelompok::class );
-    }
-
     //users < jenis 
     public function jenis(): hasMany { 
         return $this->hasMany(Jenis::class );
+    }
+
+    //users < satuan 
+    public function satuan(): hasMany { 
+        return $this->hasMany(Satuan::class );
+    }
+
+    //users < produk 
+    public function produk(): hasMany { 
+        return $this->hasMany(Produk::class );
+    }
+
+    //users < customer 
+    public function customer(): hasMany { 
+        return $this->hasMany(Customer::class );
+    }
+
+    //users < transaksi 
+    public function transaksi(): hasMany { 
+        return $this->hasMany(Transaksi::class );
     }
 
 } 

@@ -1,7 +1,3 @@
-Table kelamin{
-  id bigint [pk, increment]
-  name varchar
-}
 
 Table users{
   id bigint [pk, increment]
@@ -10,33 +6,108 @@ Table users{
   id_kelamin bigint [null]
 }
 
-Table ktp{
-  id bigint [pk, increment]
-  nik varchar [not null, unique]
-}
+
 
 
 Table jenis{
+  //dir: Kasir
   id bigint [pk, increment]
-  name varchar
+  name varchar  [not null]
   id_author bigint 
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
 }
 
-Table kelompok{
+
+Table satuan{
+  //dir: Kasir
   id bigint [pk, increment]
-  id_user bigint
-  id_jenis bigint
+  name varchar [not null]
+  id_author bigint 
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
 }
 
 
-Ref: "users"."id" - "ktp"."id" [delete: cascade]
+Table produk{
+  //dir: Kasir
+  id bigint [pk, increment]
+  name varchar  [not null]
+  keterangan text
+  harga decimal(10,2) 
+  diskon decimal(5,2)
+  ppn decimal(5,2) [default: 11.0]
+  id_jenis bigint
+  id_satuan bigint
+  id_author bigint 
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
 
-Ref: "kelamin"."id" < "users"."id_kelamin" [delete: set null]
+
+Table customer{
+  //dir: Kasir
+  id bigint [pk, increment]
+  name varchar [not null]
+  alamat text
+  no_tlp varchar
+  id_author bigint 
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
 
 
+Table kartu{
+  //dir: Kasir
+  id bigint [pk, increment]
+  kode_member varchar [not null, unique]
+  id_user bigint [not null]
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
 
-Ref: "kelompok"."id_user" > "users"."id" [delete: cascade]
 
-Ref: "jenis"."id" < "kelompok"."id_jenis"
+Table transaksi{
+  //dir: Kasir
+  id bigint [pk, increment]
+  id_customer bigint
+  id_kasir bigint
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
+
+
+Table transaksi_items{
+  //dir: Kasir
+  id bigint [pk, increment]
+  id_transaksi bigint [not null]
+  id_produk bigint [not null]
+  jumlah int [not null]
+  harga decimal(10,2) [not null]
+  created_at timestamp [null, default: null]
+  updated_at timestamp [null, default: null]
+}
+
+
 
 Ref: "users"."id" < "jenis"."id_author" [delete: set null]
+
+Ref: "users"."id" < "satuan"."id_author" [delete: set null]
+
+Ref: "users"."id" < "produk"."id_author" [delete: set null]
+
+Ref: "jenis"."id" < "produk"."id_jenis" [delete: set null]
+
+Ref: "satuan"."id" < "produk"."id_satuan" [delete: set null]
+
+Ref: "customer"."id" - "kartu"."id_user" [delete: cascade]
+
+Ref: "users"."id" < "customer"."id_author" [delete: set null]
+
+Ref: "customer"."id" < "transaksi"."id_customer" [delete: set null]
+
+Ref: "users"."id" < "transaksi"."id_kasir" [delete: set null]
+
+Ref: "produk"."id" < "transaksi_items"."id_produk" [delete: cascade]
+
+Ref: "transaksi"."id" < "transaksi_items"."id_transaksi" [delete: cascade]

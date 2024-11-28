@@ -123,13 +123,13 @@ class MetaToModel:
 
         for i in table_data:
             d = self.json_to_model(i, refs_data)
-            output_dir = os.path.join(models_dir, d['path'])
+            output_dir = models_dir + d['path']
             
             # Membuat folder jika belum ada
             os.makedirs(output_dir, exist_ok=True)
             
             # Path untuk file model
-            output_path = os.path.join(output_dir, d['model'] + '.php')
+            output_path = output_dir + "/" + d['model'] + '.php'
             
             # Menulis file model
             with open(output_path, "w") as file:
