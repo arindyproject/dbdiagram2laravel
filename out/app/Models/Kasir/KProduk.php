@@ -7,25 +7,41 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; 
 use Illuminate\Database\Eloquent\Relations\HasMany; 
 
-Class Jenis extends Model { 
+Class KProduk extends Model { 
     use HasFactory; 
-    protected $table = 'jenis'; 
+    protected $table = 'k_produk'; 
     protected $fillable = [ 
         "id", 
         "name", 
+        "keterangan", 
+        "harga", 
+        "diskon", 
+        "ppn", 
+        "id_jenis", 
+        "id_satuan", 
         "id_author", 
         "created_at", 
         "updated_at", 
     ]; 
 
-    //users < jenis 
+    //users < k_produk 
     public function author(): belongsTo { 
         return $this->belongsTo('App\Models\User' ,'id_author');
     }
 
-    //jenis < produk 
-    public function produk(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Produk' );
+    //k_jenis < k_produk 
+    public function jenis(): belongsTo { 
+        return $this->belongsTo('App\Models\KJenis' ,'id_jenis');
+    }
+
+    //k_satuan < k_produk 
+    public function satuan(): belongsTo { 
+        return $this->belongsTo('App\Models\KSatuan' ,'id_satuan');
+    }
+
+    //k_produk < k_transaksi_items 
+    public function k_transaksi_items(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KTransaksiItems' );
     }
 
 } 

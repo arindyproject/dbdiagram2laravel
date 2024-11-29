@@ -9,7 +9,7 @@ Table users{
 
 
 
-Table jenis{
+Table k_jenis{
   //dir: Kasir
   id bigint [pk, increment]
   name varchar  [not null]
@@ -19,7 +19,7 @@ Table jenis{
 }
 
 
-Table satuan{
+Table k_satuan{
   //dir: Kasir
   id bigint [pk, increment]
   name varchar [not null]
@@ -29,7 +29,7 @@ Table satuan{
 }
 
 
-Table produk{
+Table k_produk{
   //dir: Kasir
   id bigint [pk, increment]
   name varchar  [not null]
@@ -45,7 +45,7 @@ Table produk{
 }
 
 
-Table customer{
+Table k_customer{
   //dir: Kasir
   id bigint [pk, increment]
   name varchar [not null]
@@ -57,7 +57,7 @@ Table customer{
 }
 
 
-Table kartu{
+Table k_kartu{
   //dir: Kasir
   id bigint [pk, increment]
   kode_member varchar [not null, unique]
@@ -67,7 +67,7 @@ Table kartu{
 }
 
 
-Table transaksi{
+Table k_transaksi{
   //dir: Kasir
   id bigint [pk, increment]
   id_customer bigint
@@ -77,7 +77,7 @@ Table transaksi{
 }
 
 
-Table transaksi_items{
+Table k_transaksi_items{
   //dir: Kasir
   id bigint [pk, increment]
   id_transaksi bigint [not null]
@@ -90,24 +90,24 @@ Table transaksi_items{
 
 
 
-Ref: "users"."id" < "jenis"."id_author" [delete: set null]
+Ref: "users"."id" < "k_jenis"."id_author" [delete: set null]
 
-Ref: "users"."id" < "satuan"."id_author" [delete: set null]
+Ref: "users"."id" < "k_satuan"."id_author" [delete: set null]
 
-Ref: "users"."id" < "produk"."id_author" [delete: set null]
+Ref: "users"."id" < "k_produk"."id_author" [delete: set null]
 
-Ref: "jenis"."id" < "produk"."id_jenis" [delete: set null]
+Ref: "k_jenis"."id" < "k_produk"."id_jenis" [delete: set null]
 
-Ref: "satuan"."id" < "produk"."id_satuan" [delete: set null]
+Ref: "k_satuan"."id" < "k_produk"."id_satuan" [delete: set null]
 
-Ref: "customer"."id" - "kartu"."id_user" [delete: cascade]
+Ref: "k_customer"."id" - "k_kartu"."id_user" [delete: cascade]
 
-Ref: "users"."id" < "customer"."id_author" [delete: set null]
+Ref: "users"."id" < "k_customer"."id_author" [delete: set null]
 
-Ref: "customer"."id" < "transaksi"."id_customer" [delete: set null]
+Ref: "k_customer"."id" < "k_transaksi"."id_customer" [delete: set null]
 
-Ref: "users"."id" < "transaksi"."id_kasir" [delete: set null]
+Ref: "users"."id" < "k_transaksi"."id_kasir" [delete: set null]
 
-Ref: "produk"."id" < "transaksi_items"."id_produk" [delete: cascade]
+Ref: "k_produk"."id" < "k_transaksi_items"."id_produk" [delete: cascade]
 
-Ref: "transaksi"."id" < "transaksi_items"."id_transaksi" [delete: cascade]
+Ref: "k_transaksi"."id" < "k_transaksi_items"."id_transaksi" [delete: cascade]

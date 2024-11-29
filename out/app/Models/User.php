@@ -17,29 +17,29 @@ Class User extends Model {
         "id_kelamin", 
     ]; 
 
-    //users < jenis 
-    public function jenis(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Jenis' );
+    //users < k_jenis 
+    public function k_jenis(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KJenis' );
     }
 
-    //users < satuan 
-    public function satuan(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Satuan' );
+    //users < k_satuan 
+    public function k_satuan(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KSatuan' );
     }
 
-    //users < produk 
-    public function produk(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Produk' );
+    //users < k_produk 
+    public function k_produk(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KProduk' );
     }
 
-    //users < customer 
-    public function customer(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Customer' );
+    //users < k_customer 
+    public function k_customer(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KCustomer' );
     }
 
-    //users < transaksi 
-    public function transaksi(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\Transaksi' );
+    //users < k_transaksi 
+    public function k_transaksi(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KTransaksi' );
     }
 
 } 

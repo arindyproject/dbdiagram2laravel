@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; 
 use Illuminate\Database\Eloquent\Relations\HasMany; 
 
-Class Transaksi extends Model { 
+Class KTransaksi extends Model { 
     use HasFactory; 
-    protected $table = 'transaksi'; 
+    protected $table = 'k_transaksi'; 
     protected $fillable = [ 
         "id", 
         "id_customer", 
@@ -18,19 +18,19 @@ Class Transaksi extends Model {
         "updated_at", 
     ]; 
 
-    //customer < transaksi 
+    //k_customer < k_transaksi 
     public function customer(): belongsTo { 
-        return $this->belongsTo('App\Models\Kasir\Customer' ,'id_customer');
+        return $this->belongsTo('App\Models\KCustomer' ,'id_customer');
     }
 
-    //users < transaksi 
+    //users < k_transaksi 
     public function kasir(): belongsTo { 
         return $this->belongsTo('App\Models\User' ,'id_kasir');
     }
 
-    //transaksi < transaksi_items 
-    public function transaksi_items(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\TransaksiItems' );
+    //k_transaksi < k_transaksi_items 
+    public function k_transaksi_items(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KTransaksiItems' );
     }
 
 } 

@@ -7,20 +7,25 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo; 
 use Illuminate\Database\Eloquent\Relations\HasMany; 
 
-Class Kartu extends Model { 
+Class KJenis extends Model { 
     use HasFactory; 
-    protected $table = 'kartu'; 
+    protected $table = 'k_jenis'; 
     protected $fillable = [ 
         "id", 
-        "kode_member", 
-        "id_user", 
+        "name", 
+        "id_author", 
         "created_at", 
         "updated_at", 
     ]; 
 
-    //customer - kartu 
-    public function customer(): hasOne { 
-        return $this->hasOne('App\Models\Kasir\Customer' );
+    //users < k_jenis 
+    public function author(): belongsTo { 
+        return $this->belongsTo('App\Models\User' ,'id_author');
+    }
+
+    //k_jenis < k_produk 
+    public function k_produk(): hasMany { 
+        return $this->hasMany('App\Models\Kasir\KProduk' );
     }
 
 } 

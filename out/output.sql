@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS jenis (
+CREATE TABLE IF NOT EXISTS k_jenis (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   id_author bigint UNSIGNED NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS jenis (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS satuan (
+CREATE TABLE IF NOT EXISTS k_satuan (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   id_author bigint UNSIGNED NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS satuan (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS produk (
+CREATE TABLE IF NOT EXISTS k_produk (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   keterangan text NULL,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS produk (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS customer (
+CREATE TABLE IF NOT EXISTS k_customer (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   alamat text NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS customer (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS kartu (
+CREATE TABLE IF NOT EXISTS k_kartu (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   kode_member varchar(255) NOT NULL,
   id_user bigint UNSIGNED NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS kartu (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS transaksi (
+CREATE TABLE IF NOT EXISTS k_transaksi (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   id_customer bigint UNSIGNED NULL,
   id_kasir bigint UNSIGNED NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS transaksi (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS transaksi_items (
+CREATE TABLE IF NOT EXISTS k_transaksi_items (
   id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   id_transaksi bigint UNSIGNED NOT NULL,
   id_produk bigint UNSIGNED NOT NULL,
@@ -79,14 +79,14 @@ CREATE TABLE IF NOT EXISTS transaksi_items (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE `jenis` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-ALTER TABLE `satuan` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-ALTER TABLE `produk` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-ALTER TABLE `produk` ADD FOREIGN KEY (`id_jenis`) REFERENCES `jenis` (`id`) ON DELETE SET NULL;
-ALTER TABLE `produk` ADD FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`) ON DELETE SET NULL;
-ALTER TABLE `kartu` ADD FOREIGN KEY (`id_user`) REFERENCES `customer` (`id`) ON DELETE CASCADE;
-ALTER TABLE `customer` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-ALTER TABLE `transaksi` ADD FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id`) ON DELETE SET NULL;
-ALTER TABLE `transaksi` ADD FOREIGN KEY (`id_kasir`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-ALTER TABLE `transaksi_items` ADD FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id`) ON DELETE CASCADE;
-ALTER TABLE `transaksi_items` ADD FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id`) ON DELETE CASCADE;
+ALTER TABLE `k_jenis` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_satuan` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_produk` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_produk` ADD FOREIGN KEY (`id_jenis`) REFERENCES `k_jenis` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_produk` ADD FOREIGN KEY (`id_satuan`) REFERENCES `k_satuan` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_kartu` ADD FOREIGN KEY (`id_user`) REFERENCES `k_customer` (`id`) ON DELETE CASCADE;
+ALTER TABLE `k_customer` ADD FOREIGN KEY (`id_author`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_transaksi` ADD FOREIGN KEY (`id_customer`) REFERENCES `k_customer` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_transaksi` ADD FOREIGN KEY (`id_kasir`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+ALTER TABLE `k_transaksi_items` ADD FOREIGN KEY (`id_produk`) REFERENCES `k_produk` (`id`) ON DELETE CASCADE;
+ALTER TABLE `k_transaksi_items` ADD FOREIGN KEY (`id_transaksi`) REFERENCES `k_transaksi` (`id`) ON DELETE CASCADE;
