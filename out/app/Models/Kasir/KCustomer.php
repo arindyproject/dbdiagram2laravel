@@ -22,7 +22,7 @@ Class KCustomer extends Model {
 
     //k_customer - k_kartu 
     public function k_kartu(): hasOne { 
-        return $this->hasOne('App\Models\Kasir\KKartu' );
+        return $this->hasOne('App\Models\Kasir\KKartu' ,'id_user');
     }
 
     //users < k_customer 

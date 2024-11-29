@@ -20,7 +20,7 @@ Class KKartu extends Model {
 
     //k_customer - k_kartu 
     public function k_customer(): hasOne { 
-        return $this->hasOne('App\Models\Kasir\KCustomer' );
+        return $this->hasOne('App\Models\Kasir\KCustomer' ,'id');
     }
 
 } 

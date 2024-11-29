@@ -78,6 +78,7 @@ class MetaToModel:
                     name_func   = seleted['name']
                     rela        = "hasOne"
                     class_rel   = self.ubah_nama(name_func)
+                    class_ref = seleted['ref']
                     class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                 elif(i['mark'] == '<'): #< one-to-many
                     seleted = i["tb2"]
