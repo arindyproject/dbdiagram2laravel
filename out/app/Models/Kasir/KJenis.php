@@ -25,7 +25,7 @@ Class KJenis extends Model {
 
     //k_jenis < k_produk 
     public function k_produk(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KProduk' );
+        return $this->hasMany('App\Models\Kasir\KProduk' ,'id_jenis');
     }
 
 } 

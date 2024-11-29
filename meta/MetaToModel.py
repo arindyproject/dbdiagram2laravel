@@ -85,6 +85,7 @@ class MetaToModel:
                         name_func = seleted['name']
                         rela      = "hasMany"
                         class_rel = self.ubah_nama(name_func)
+                        class_ref = seleted['ref']
                         class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                     else:
                         name_func = seleted['ref'].replace('id_', '').replace('_id', '')
@@ -98,6 +99,7 @@ class MetaToModel:
                         name_func = seleted['name']
                         rela      = "hasMany"
                         class_rel = self.ubah_nama(name_func)
+                        class_ref = seleted['ref']
                         class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
                     else:
                         name_func = seleted['ref'].replace('id_', '').replace('_id', '')

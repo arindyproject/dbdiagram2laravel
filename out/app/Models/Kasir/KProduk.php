@@ -41,7 +41,7 @@ Class KProduk extends Model {
 
     //k_produk < k_transaksi_items 
     public function k_transaksi_items(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KTransaksiItems' );
+        return $this->hasMany('App\Models\Kasir\KTransaksiItems' ,'id_produk');
     }
 
 } 

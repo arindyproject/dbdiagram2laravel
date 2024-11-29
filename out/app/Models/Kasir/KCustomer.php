@@ -32,7 +32,7 @@ Class KCustomer extends Model {
 
     //k_customer < k_transaksi 
     public function k_transaksi(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KTransaksi' );
+        return $this->hasMany('App\Models\Kasir\KTransaksi' ,'id_customer');
     }
 
 } 

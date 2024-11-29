@@ -19,27 +19,27 @@ Class User extends Model {
 
     //users < k_jenis 
     public function k_jenis(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KJenis' );
+        return $this->hasMany('App\Models\Kasir\KJenis' ,'id_author');
     }
 
     //users < k_satuan 
     public function k_satuan(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KSatuan' );
+        return $this->hasMany('App\Models\Kasir\KSatuan' ,'id_author');
     }
 
     //users < k_produk 
     public function k_produk(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KProduk' );
+        return $this->hasMany('App\Models\Kasir\KProduk' ,'id_author');
     }
 
     //users < k_customer 
     public function k_customer(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KCustomer' );
+        return $this->hasMany('App\Models\Kasir\KCustomer' ,'id_author');
     }
 
     //users < k_transaksi 
     public function k_transaksi(): hasMany { 
-        return $this->hasMany('App\Models\Kasir\KTransaksi' );
+        return $this->hasMany('App\Models\Kasir\KTransaksi' ,'id_kasir');
     }
 
 } 
