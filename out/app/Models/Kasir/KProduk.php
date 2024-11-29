@@ -31,12 +31,12 @@ Class KProduk extends Model {
 
     //k_jenis < k_produk 
     public function jenis(): belongsTo { 
-        return $this->belongsTo('App\Models\KJenis' ,'id_jenis');
+        return $this->belongsTo('App\Models\Kasir\KJenis' ,'id_jenis');
     }
 
     //k_satuan < k_produk 
     public function satuan(): belongsTo { 
-        return $this->belongsTo('App\Models\KSatuan' ,'id_satuan');
+        return $this->belongsTo('App\Models\Kasir\KSatuan' ,'id_satuan');
     }
 
     //k_produk < k_transaksi_items 

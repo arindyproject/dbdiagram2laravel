@@ -29,7 +29,7 @@ class MetaToModel:
     def get_class_rel_dir(self, table_data, table_name):
         for i in table_data:
             if(i['table'] == table_name):
-                return "App\Models\\" + ( i['dir'] + "\\" ) if i['dir'] else ""
+                return "App\Models\\" + ( i['dir'] + "\\" ) if i['dir'] else "App\Models\\"
         return "App\Models\\"
     
 
@@ -93,7 +93,7 @@ class MetaToModel:
                         rela      = "belongsTo"
                         class_rel = self.ubah_nama(i["tb1"]['name'])
                         class_ref = seleted['ref']
-                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], i["tb1"]['name'])
                 elif(i['mark'] == '>'): #< many-to-one
                     seleted = i["tb1"]
                     if seleted['name'] != table_name :
@@ -107,7 +107,7 @@ class MetaToModel:
                         rela      = "belongsTo"
                         class_rel = self.ubah_nama(i["tb2"]['name'])
                         class_ref = seleted['ref']
-                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], name_func)
+                        class_dir   = self.get_class_rel_dir(self.json_data['tabels'], i["tb2"]['name'])
                 #-----------------------------------------       
                 class_ref = "," + "'" +class_ref + "'" if  class_ref else ''    
                 mod += f"    //{i['tb1']['name']} {i['mark']} {i['tb2']['name']} \n"

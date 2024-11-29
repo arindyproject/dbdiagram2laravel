@@ -20,7 +20,7 @@ Class KTransaksi extends Model {
 
     //k_customer < k_transaksi 
     public function customer(): belongsTo { 
-        return $this->belongsTo('App\Models\KCustomer' ,'id_customer');
+        return $this->belongsTo('App\Models\Kasir\KCustomer' ,'id_customer');
     }
 
     //users < k_transaksi 
