@@ -54,7 +54,7 @@ class MetaToModel:
         mod+=  '    protected $fillable = [ \n'
         #-------------------------------------------------
         for i in columns:
-            if(i['name'] != 'created_at' or i['name'] != 'updated_at' ):
+            if(i['name'] != 'created_at' and i['name'] != 'updated_at' ):
                 mod +='        "' + i['name'] +'", \n'
 
         mod+= '    ]; \n\n'
