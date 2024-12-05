@@ -35,16 +35,49 @@ class MetaToRes:
         return "App\Http\Resources\\"
     
 
-    def cek_out_type(self, i):
+    def cek_name_tbl_out_type(self, table_name):
+        table_data = self.json_data['tabels']
+        tbl = []
+        for tb in table_data:
+            if(table_name == tb['table']):
+                tbl = tb
+                break
+        
+        if(tbl):
+            for i in tbl['items']:
+                if('name' in i['name']):
+                    return i['name']
+                elif('nama' in i['name']):
+                    return i['name']
+        return ""
+    
+
+    def cek_out_type(self, i, refs_data, max_length=10):
+        #print(i)
+        li= i["name"]
+        ri= f'$this->{i["name"]}'
+        #---------------------------------------------------------
         if(i['type'] == 'timestamp'):
-            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
+            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
         elif(i['type'] == 'datetime'):
-            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
+            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
         elif(i['type'] == 'date'):
-            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d") : ""'
+            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d") : ""'
         elif(i['type'] == 'time'):
-            return f'$this->{i["name"]} ? $this->{i["name"]}->format("h:i:s") : ""'
-        return f'$this->{i["name"]}'
+            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("h:i:s") : ""'
+        #---------------------------------------------------------
+        elif(i['type'] == 'bigint' or i['type'] == 'int'):
+            if('id_' in i['name'] or '_id' in i['name']):
+                for rf in refs_data:
+                    if(rf['tb2']['ref'] == i['name']): # and rf['tb1']['name'] == 'users'):
+                        li= i["name"].replace("_id","").replace("id_","")
+                        rlf = ""
+                        if(self.cek_name_tbl_out_type( rf["tb1"]["name"] )):
+                            rlf = f'"{self.cek_name_tbl_out_type( rf["tb1"]["name"] )}" => $this->{li}->{self.cek_name_tbl_out_type( rf["tb1"]["name"] )}'
+                        ri = f'$this->{i["name"]} ? [ "id" => $this->{ li }->id , {rlf} ] : []'
+                        break
+                
+        return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
     
 
     def json_to_model(self, table_data, refs_data):
@@ -52,6 +85,8 @@ class MetaToRes:
         table_name = table_data["table"]
         columns    = table_data["items"]
         model_name = self.ubah_nama(table_name)
+
+        print(json.dumps(table_data, indent=4))
  
         #-------------------------------------------------
         mod = '<?php \n'
@@ -74,8 +109,7 @@ class MetaToRes:
         #-------------------------------------------------
         max_length = max(len(i['name']) for i in columns)
         for i in columns:
-            out_nya = self.cek_out_type(i)
-            mod += f'            "{i["name"]}"{" " * (max_length - len(i["name"]))} => {out_nya}, \n'
+            mod+= self.cek_out_type(i, refs_data=refs_data, max_length=max_length)
         #-------------------------------------------------
 
         #-------------------------------------------------

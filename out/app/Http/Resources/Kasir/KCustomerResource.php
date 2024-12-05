@@ -16,7 +16,7 @@ Class KCustomerResource extends JsonResource {
             "name"       => $this->name, 
             "alamat"     => $this->alamat, 
             "no_tlp"     => $this->no_tlp, 
-            "id_author"  => $this->id_author, 
+            "author"     => $this->id_author ? [ "id" => $this->author->id , "name" => $this->author->name ] : [], 
             "created_at" => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
             "updated_at" => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
         ]; 

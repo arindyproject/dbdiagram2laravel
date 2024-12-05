@@ -13,8 +13,8 @@ Class KTransaksiItemsResource extends JsonResource {
     public function toArray($request){
         return[
             "id"           => $this->id, 
-            "id_transaksi" => $this->id_transaksi, 
-            "id_produk"    => $this->id_produk, 
+            "transaksi"    => $this->id_transaksi ? [ "id" => $this->transaksi->id ,  ] : [], 
+            "produk"       => $this->id_produk ? [ "id" => $this->produk->id , "name" => $this->produk->name ] : [], 
             "jumlah"       => $this->jumlah, 
             "harga"        => $this->harga, 
             "created_at"   => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 

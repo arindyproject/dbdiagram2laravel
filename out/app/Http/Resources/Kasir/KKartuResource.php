@@ -14,7 +14,7 @@ Class KKartuResource extends JsonResource {
         return[
             "id"          => $this->id, 
             "kode_member" => $this->kode_member, 
-            "id_user"     => $this->id_user, 
+            "user"        => $this->id_user ? [ "id" => $this->user->id , "name" => $this->user->name ] : [], 
             "created_at"  => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
             "updated_at"  => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
         ]; 

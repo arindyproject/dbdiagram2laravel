@@ -18,9 +18,9 @@ Class KProdukResource extends JsonResource {
             "harga"      => $this->harga, 
             "diskon"     => $this->diskon, 
             "ppn"        => $this->ppn, 
-            "id_jenis"   => $this->id_jenis, 
-            "id_satuan"  => $this->id_satuan, 
-            "id_author"  => $this->id_author, 
+            "jenis"      => $this->id_jenis ? [ "id" => $this->jenis->id , "name" => $this->jenis->name ] : [], 
+            "satuan"     => $this->id_satuan ? [ "id" => $this->satuan->id , "name" => $this->satuan->name ] : [], 
+            "author"     => $this->id_author ? [ "id" => $this->author->id , "name" => $this->author->name ] : [], 
             "created_at" => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
             "updated_at" => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
         ]; 
