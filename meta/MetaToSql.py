@@ -101,6 +101,10 @@ class MetaToSql:
         Memproses JSON untuk semua tabel dan menyimpannya ke folder 'out'.
         :param file_name: Nama file output.
         """
+
+        print('\n\n+=============================================+')
+        print('|             Generating MySql                |')
+        print('+=============================================+')
         # Buat folder 'out' jika belum ada
         output_dir = "out"
         os.makedirs(output_dir, exist_ok=True)
@@ -127,3 +131,4 @@ class MetaToSql:
             file.write(final_sql)
         
         print(f"SQL berhasil disimpan di {output_path}")
+        print('+=============================================+')

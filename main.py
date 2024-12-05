@@ -1,6 +1,7 @@
 from meta.DiagramToMeta import DiagramToMeta
-from meta.MetaToSql import MetaToSql
-from meta.MetaToModel import MetaToModel
+from meta.MetaToSql     import MetaToSql
+from meta.MetaToModel   import MetaToModel
+from meta.MetaToRes     import MetaToRes
 
 import argparse
 import json
@@ -9,7 +10,8 @@ import json
 def main():
     parser = argparse.ArgumentParser(description="Process metadata and generate SQL or models.")
     parser.add_argument("-i", "--input", required=True, help="Input file containing JSON metadata.")
-    parser.add_argument("-m", "--mode", required=True, choices=["mysql", "sql", "migrate", "model"], help="Mode of operation.")
+    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res"], help="Mode of operation.")
+    parser.add_argument("-e", "--exc",   nargs="*",     default=[], help="List of columns to exception (optional).")
     
     args = parser.parse_args()
 
@@ -24,16 +26,51 @@ def main():
         return
 
     # Handle the specified mode
-    if args.mode == "mysql" or args.mode == "sql":
+    #-------------------------------------------------
+    if args.mode == "all":
+        converter = MetaToSql(result)
+        converter.process_and_save("output.sql")
+
+        converter = MetaToModel(result, exc=args.exc)
+        converter.process_and_save()
+
+        converter = MetaToRes(result, exc=args.exc)
+        converter.process_and_save()
+
+    #-------------------------------------------------
+    elif args.mode == "mysql" or args.mode == "sql":
         converter = MetaToSql(result)
         converter.process_and_save("output.sql")
     elif args.mode == "migrate":
         print("Migrate mode is under development.")
     elif args.mode == "model":
-        converter = MetaToModel(result)
+        converter = MetaToModel(result, exc=args.exc)
+        converter.process_and_save()
+    elif args.mode == "res":
+        converter = MetaToRes(result, exc=args.exc)
         converter.process_and_save()
     else:
         print("Invalid mode selected.")
+    #-------------------------------------------------
+
+
+print('+=======================================================+')
+print('|                      ArindyProject                    |')
+print('|                 dbdiagram.io TO Laravel               |')
+print('|-------------------------------------------------------|')
+print('| -i / --input : Input file from dbdiagram .txt.        |')
+print('| -m / --mode  : Mode of operation.                     |')
+print('|     Modes:                                            |')
+print('|       mysql/sql  -> Generate SQL file                 |')
+print('|       migrate    -> Generate Laravel migration        |')
+print('|       model      -> Generate Laravel Model            |')
+print('|       res        -> Generate Laravel Resources        |')
+print('|       all        -> Generate ALL Modes                |')
+print('| -e / --exc   : To exclude columns from generation.    |')
+print('|              : To Models, Resources                   |')
+print('+=======================================================+')
+
+
 
 if __name__ == "__main__":
     main()

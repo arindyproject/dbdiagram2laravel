@@ -14,8 +14,6 @@ Class KKartu extends Model {
         "id", 
         "kode_member", 
         "id_user", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //k_customer - k_kartu 

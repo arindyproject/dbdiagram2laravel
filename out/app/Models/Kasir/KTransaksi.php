@@ -14,8 +14,6 @@ Class KTransaksi extends Model {
         "id", 
         "id_customer", 
         "id_kasir", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //k_customer < k_transaksi 

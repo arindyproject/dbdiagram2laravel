@@ -14,8 +14,6 @@ Class KSatuan extends Model {
         "id", 
         "name", 
         "id_author", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //users < k_satuan 

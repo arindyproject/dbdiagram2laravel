@@ -1,7 +1,7 @@
 import json, shutil, os
 
 class MetaToRes:
-    def __init__(self, json_data):
+    def __init__(self, json_data, exc=[]):
         """
         Inisialisasi MetaToRes dengan data JSON.
         :param json_data: Data JSON yang berisi definisi tabel.
@@ -12,7 +12,8 @@ class MetaToRes:
             self.json_data = json_data
         else:
             raise ValueError("Input harus berupa string JSON atau list dictionary.")
-    
+
+        self.exc = exc
 
     def ubah_nama(self,input_text):
         """
@@ -32,6 +33,18 @@ class MetaToRes:
             if(i['table'] == table_name):
                 return "App\Http\Resources\\" + ( i['dir'] + "\\" ) if i['dir'] else "App\Http\Resources\\"
         return "App\Http\Resources\\"
+    
+
+    def cek_out_type(self, i):
+        if(i['type'] == 'timestamp'):
+            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
+        elif(i['type'] == 'datetime'):
+            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
+        elif(i['type'] == 'date'):
+            return f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d") : ""'
+        elif(i['type'] == 'time'):
+            return f'$this->{i["name"]} ? $this->{i["name"]}->format("h:i:s") : ""'
+        return f'$this->{i["name"]}'
     
 
     def json_to_model(self, table_data, refs_data):
@@ -61,7 +74,8 @@ class MetaToRes:
         #-------------------------------------------------
         max_length = max(len(i['name']) for i in columns)
         for i in columns:
-            mod += f'            "{i["name"]}"{" " * (max_length - len(i["name"]))} => $this->{i["name"]}, \n'
+            out_nya = self.cek_out_type(i)
+            mod += f'            "{i["name"]}"{" " * (max_length - len(i["name"]))} => {out_nya}, \n'
         #-------------------------------------------------
 
         #-------------------------------------------------
@@ -79,7 +93,11 @@ class MetaToRes:
     
     def process_and_save(self):
         # Path ke direktori yang akan dihapus
-        models_dir = "out/app/Resources"
+        models_dir = "out/app/Http/Resources"
+
+        print('\n\n+=============================================+')
+        print('|             Generating Resources            |')
+        print('+=============================================+')
 
         # Hapus direktori jika ada
         if os.path.exists(models_dir):
@@ -87,22 +105,32 @@ class MetaToRes:
             print(f"Direktori {models_dir} berhasil dihapus.")
 
         table_data = self.json_data['tabels']
-        refs_data = self.json_data['refs']
-
+        refs_data  = self.json_data['refs']
+        total_file = 0
         for i in table_data:
-            d = self.json_to_model(i, refs_data)
-            output_dir = models_dir + d['path']
-            
-            # Membuat folder jika belum ada
-            os.makedirs(output_dir, exist_ok=True)
-            
-            # Path untuk file model
-            output_path = output_dir + "/" + d['model'] + '.php'
-            
-            # Menulis file model
-            with open(output_path, "w") as file:
-                file.write(d['class'])
+            if i['table'].lower() not in [exc_item.lower() for exc_item in self.exc]:
+                total_file += 1
+                d = self.json_to_model(i, refs_data)
+                output_dir = models_dir + d['path']
+                
+                # Membuat folder jika belum ada
+                os.makedirs(output_dir, exist_ok=True)
+                
+                # Path untuk file model
+                output_path = output_dir + "/" + d['model'] + '.php'
+                
+                # Menulis file model
+                with open(output_path, "w") as file:
+                    file.write(d['class'])
 
-            print(f"Resources berhasil disimpan di {output_path}")
-            print(d['class'])
-            #print(json.dumps(d, indent=4))
+                print(f"Resources berhasil disimpan di {output_path}")
+                #print(d['class'])
+                #print(json.dumps(d, indent=4))
+
+        print('+=============================================+')
+        print(f"Total File                   : {total_file}")
+        if(self.exc):
+            print(f"Total pengecualian           : {len(self.exc)}")
+            print(f"Memproses dengan pengecualian: {self.exc}")
+        
+        print('+=============================================+')

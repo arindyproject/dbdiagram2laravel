@@ -4,7 +4,7 @@ namespace App\Http\Resources\Kasir;
 use Illuminate\Http\Request; 
 use Illuminate\Http\Resources\Json\JsonResource; 
 
-Class KKartuResource extends JsonResource { 
+Class KTransaksiResource extends JsonResource { 
     /**
     * Transform the resource into an array.
     *
@@ -13,10 +13,10 @@ Class KKartuResource extends JsonResource {
     public function toArray($request){
         return[
             "id"          => $this->id, 
-            "kode_member" => $this->kode_member, 
-            "id_user"     => $this->id_user, 
-            "created_at"  => $this->created_at, 
-            "updated_at"  => $this->updated_at, 
+            "id_customer" => $this->id_customer, 
+            "id_kasir"    => $this->id_kasir, 
+            "created_at"  => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
+            "updated_at"  => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
         ]; 
     } 
 } 

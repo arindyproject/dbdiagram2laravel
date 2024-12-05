@@ -16,8 +16,6 @@ Class KTransaksiItems extends Model {
         "id_produk", 
         "jumlah", 
         "harga", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //k_produk < k_transaksi_items 

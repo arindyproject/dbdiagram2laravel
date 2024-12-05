@@ -20,8 +20,6 @@ Class KProduk extends Model {
         "id_jenis", 
         "id_satuan", 
         "id_author", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //users < k_produk 

@@ -4,7 +4,7 @@ namespace App\Http\Resources\Kasir;
 use Illuminate\Http\Request; 
 use Illuminate\Http\Resources\Json\JsonResource; 
 
-Class KJenisResource extends JsonResource { 
+Class KProdukResource extends JsonResource { 
     /**
     * Transform the resource into an array.
     *
@@ -14,9 +14,15 @@ Class KJenisResource extends JsonResource {
         return[
             "id"         => $this->id, 
             "name"       => $this->name, 
+            "keterangan" => $this->keterangan, 
+            "harga"      => $this->harga, 
+            "diskon"     => $this->diskon, 
+            "ppn"        => $this->ppn, 
+            "id_jenis"   => $this->id_jenis, 
+            "id_satuan"  => $this->id_satuan, 
             "id_author"  => $this->id_author, 
-            "created_at" => $this->created_at, 
-            "updated_at" => $this->updated_at, 
+            "created_at" => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
+            "updated_at" => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
         ]; 
     } 
 } 

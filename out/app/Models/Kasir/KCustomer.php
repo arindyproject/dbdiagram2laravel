@@ -16,8 +16,6 @@ Class KCustomer extends Model {
         "alamat", 
         "no_tlp", 
         "id_author", 
-        "created_at", 
-        "updated_at", 
     ]; 
 
     //k_customer - k_kartu 
