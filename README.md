@@ -17,8 +17,7 @@ This application converts **dbdiagram.io** formats into Laravel-compatible files
 |                 | - `model`      -> Generate Laravel Model         |
 |                 | - `res`        -> Generate Laravel Resources     |
 |                 | - `all`        -> Generate ALL Modes             |
-| **-e / --exc**   | Exclude columns from generation.                |
-|                 | Applies to Models and Resources.                |
+| **-e / --exc**  | Exclude columns from generation.  Applies to Models and Resources.|
 
 ## Example Commands  
 Using the input file `dbdiagram.txt` and `model` mode:  
