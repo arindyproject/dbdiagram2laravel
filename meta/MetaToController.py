@@ -53,7 +53,7 @@ class MetaToController:
         mod+= 'use Illuminate\Support\Facades\Validator; \n'
         mod+= ' \n'
         mod+= 'use App\Http\Resources\BaseResource; \n'
-        mod+= 'use App\Http\Resources' + dir + '\\' + model_name + 'Resources; \n'
+        mod+= 'use App\Http\Resources' + dir + '\\' + model_name + 'Resource; \n'
         mod+= 'use App\Models' + dir + '\\' + model_name + '; \n'
         mod+= ' \n'
 
@@ -64,7 +64,7 @@ class MetaToController:
         mod+= '    public function __construct(){\n'
         mod+= f'        $this->title = "{model_name}";\n'
         mod+= f'        $this->model = new {model_name};\n'
-        mod+= f'        $this->res   = new {model_name}Resources(null);\n'
+        mod+= f'        $this->res   = new {model_name}Resource(null);\n'
         mod+= '    }\n'
         mod+= '    //end_construct------------------------------------------\n\n\n'
         #-------------------------------------------------
