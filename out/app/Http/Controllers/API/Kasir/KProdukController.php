@@ -6,18 +6,48 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Validator; 
-
+ 
 use App\Http\Resources\BaseResource; 
+use App\Http\Resources\Kasir\KProdukResources; 
+use App\Models\Kasir\KProduk; 
  
 Class KProdukController extends Controller { 
     //construct----------------------------------------------
     public function __construct(){
+        $this->model = new KProduk;
+        $this->res   = new KProdukResources(null);
     }
     //end_construct------------------------------------------
 
-    //index--------------------------------------------------
-    public function index(){
+
+    //list---------------------------------------------------
+    public function list(){
     }
-    //end_index----------------------------------------------
+    //end_list-----------------------------------------------
+
+
+    //show---------------------------------------------------
+    public function show($id){
+    }
+    //end_show-----------------------------------------------
+
+
+    //create-------------------------------------------------
+    public function create(Request $request){
+    }
+    //end_create---------------------------------------------
+
+
+    //update-------------------------------------------------
+    public function update(Request $request, $id){
+    }
+    //end_update---------------------------------------------
+
+
+    //delete-------------------------------------------------
+    public function delete($id){
+    }
+    //end_delete---------------------------------------------
+
 
 } 
