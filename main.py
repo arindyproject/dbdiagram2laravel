@@ -2,6 +2,7 @@ from meta.DiagramToMeta import DiagramToMeta
 from meta.MetaToSql     import MetaToSql
 from meta.MetaToModel   import MetaToModel
 from meta.MetaToRes     import MetaToRes
+from meta.MetaToController     import MetaToController
 
 import argparse
 import json
@@ -10,7 +11,7 @@ import json
 def main():
     parser = argparse.ArgumentParser(description="Process metadata and generate SQL or models.")
     parser.add_argument("-i", "--input", required=True, help="Input file containing JSON metadata.")
-    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res"], help="Mode of operation.")
+    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res", "controller"], help="Mode of operation.")
     parser.add_argument("-e", "--exc",   nargs="*",     default=[], help="List of columns to exception (optional).")
     
     args = parser.parse_args()
@@ -37,6 +38,9 @@ def main():
         converter = MetaToRes(result, exc=args.exc)
         converter.process_and_save()
 
+        converter = MetaToController(result, exc=args.exc)
+        converter.process_and_save()
+
     #-------------------------------------------------
     elif args.mode == "mysql" or args.mode == "sql":
         converter = MetaToSql(result)
@@ -48,6 +52,9 @@ def main():
         converter.process_and_save()
     elif args.mode == "res":
         converter = MetaToRes(result, exc=args.exc)
+        converter.process_and_save()
+    elif args.mode == "controller":
+        converter = MetaToController(result, exc=args.exc)
         converter.process_and_save()
     else:
         print("Invalid mode selected.")
