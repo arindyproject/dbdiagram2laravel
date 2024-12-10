@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\UserResources; 
+use App\Http\Resources\UserResource; 
 use App\Models\User; 
  
 Class UserController extends Controller { 
@@ -16,14 +16,18 @@ Class UserController extends Controller {
     public function __construct(){
         $this->title = "User";
         $this->model = new User;
-        $this->res   = new UserResources(null);
+        $this->res   = new UserResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "name"       => "nullable|string|max:255", 
+            "alamat"     => "nullable|string", 
+            "id_kelamin" => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

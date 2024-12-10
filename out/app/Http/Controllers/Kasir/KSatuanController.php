@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KSatuanResources; 
+use App\Http\Resources\Kasir\KSatuanResource; 
 use App\Models\Kasir\KSatuan; 
  
 Class KSatuanController extends Controller { 
@@ -16,14 +16,17 @@ Class KSatuanController extends Controller {
     public function __construct(){
         $this->title = "KSatuan";
         $this->model = new KSatuan;
-        $this->res   = new KSatuanResources(null);
+        $this->res   = new KSatuanResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "name"       => "required|string|max:255", 
+            "id_author"  => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

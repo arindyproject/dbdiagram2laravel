@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KJenisResources; 
+use App\Http\Resources\Kasir\KJenisResource; 
 use App\Models\Kasir\KJenis; 
  
 Class KJenisController extends Controller { 
@@ -16,14 +16,17 @@ Class KJenisController extends Controller {
     public function __construct(){
         $this->title = "KJenis";
         $this->model = new KJenis;
-        $this->res   = new KJenisResources(null);
+        $this->res   = new KJenisResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "name"       => "required|string|max:255", 
+            "id_author"  => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

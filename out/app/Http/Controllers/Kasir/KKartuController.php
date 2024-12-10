@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KKartuResources; 
+use App\Http\Resources\Kasir\KKartuResource; 
 use App\Models\Kasir\KKartu; 
  
 Class KKartuController extends Controller { 
@@ -16,14 +16,17 @@ Class KKartuController extends Controller {
     public function __construct(){
         $this->title = "KKartu";
         $this->model = new KKartu;
-        $this->res   = new KKartuResources(null);
+        $this->res   = new KKartuResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "kode_member" => "required|string|max:255", 
+            "id_user"     => "required|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

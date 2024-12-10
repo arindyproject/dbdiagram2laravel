@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KProdukResources; 
+use App\Http\Resources\Kasir\KProdukResource; 
 use App\Models\Kasir\KProduk; 
  
 Class KProdukController extends Controller { 
@@ -16,14 +16,23 @@ Class KProdukController extends Controller {
     public function __construct(){
         $this->title = "KProduk";
         $this->model = new KProduk;
-        $this->res   = new KProdukResources(null);
+        $this->res   = new KProdukResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "name"       => "required|string|max:255", 
+            "keterangan" => "nullable|string", 
+            "harga"      => "nullable|numeric:10,2", 
+            "diskon"     => "nullable|numeric:5,2", 
+            "ppn"        => "nullable|numeric:5,2", 
+            "id_jenis"   => "nullable|integer", 
+            "id_satuan"  => "nullable|integer", 
+            "id_author"  => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

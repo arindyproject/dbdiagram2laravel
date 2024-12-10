@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KCustomerResources; 
+use App\Http\Resources\Kasir\KCustomerResource; 
 use App\Models\Kasir\KCustomer; 
  
 Class KCustomerController extends Controller { 
@@ -16,14 +16,19 @@ Class KCustomerController extends Controller {
     public function __construct(){
         $this->title = "KCustomer";
         $this->model = new KCustomer;
-        $this->res   = new KCustomerResources(null);
+        $this->res   = new KCustomerResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "name"       => "required|string|max:255", 
+            "alamat"     => "nullable|string", 
+            "no_tlp"     => "nullable|string|max:255", 
+            "id_author"  => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

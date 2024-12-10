@@ -75,6 +75,12 @@ class DiagramToMeta:
         Mengecek apakah atribut primary key didefinisikan.
         """
         return 'pk' in ls
+    
+    def ck_is_unique(self, ls):
+        """
+        Mengecek apakah unique primary key didefinisikan.
+        """
+        return 'unique' in ls
 
     def ck_is_increment(self, ls):
         """
@@ -134,7 +140,8 @@ class DiagramToMeta:
                     'type': self.ck_type(items[1]),
                     'null': len(items) < 3,
                     'increment': False,
-                    'attributes': ''
+                    'attributes': '',
+                    'is_unique' : self.ck_is_unique(result)
                 }
 
                 if 'id_' in items[0] or '_id' in items[0]:
@@ -143,6 +150,7 @@ class DiagramToMeta:
                 match = re.search(r"\[(.*?)\]", line)
                 if match:
                     result = re.split(r",\s*", match.group(1))
+                    
                     tmp['increment'] = self.ck_is_increment(result)
                     tmp['primary'] = self.ck_is_primary(result)
                     tmp['null'] = self.ck_is_null(result)

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator; 
  
 use App\Http\Resources\BaseResource; 
-use App\Http\Resources\Kasir\KTransaksiResources; 
+use App\Http\Resources\Kasir\KTransaksiResource; 
 use App\Models\Kasir\KTransaksi; 
  
 Class KTransaksiController extends Controller { 
@@ -16,14 +16,17 @@ Class KTransaksiController extends Controller {
     public function __construct(){
         $this->title = "KTransaksi";
         $this->model = new KTransaksi;
-        $this->res   = new KTransaksiResources(null);
+        $this->res   = new KTransaksiResource(null);
     }
     //end_construct------------------------------------------
 
 
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
-        return[]; 
+        return[
+            "id_customer" => "nullable|integer", 
+            "id_kasir"    => "nullable|integer", 
+        ]; 
     }
     //end_roles----------------------------------------------
 

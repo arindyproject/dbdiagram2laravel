@@ -1,4 +1,4 @@
-import json, os, shutil
+import json, os, shutil, re
 
 class MetaToController:
     def __init__(self, json_data, dir="", exc=[]):
@@ -35,6 +35,90 @@ class MetaToController:
             if(i['table'] == table_name):
                 return f"App\Http\Controllers{self.dir}\\" + ( i['dir'] + "\\" ) if i['dir'] else f"App\Http\Controllers{self.dir}\\"
         return f"App\Http\Controllers{self.dir}\\"
+    
+
+    def cek_name_tbl_out_type(self, table_name):
+        table_data = self.json_data['tabels']
+        tbl = []
+        for tb in table_data:
+            if(table_name == tb['table']):
+                tbl = tb
+                break
+        
+        if(tbl):
+            for i in tbl['items']:
+                if('name' in i['name']):
+                    return i['name']
+                elif('nama' in i['name']):
+                    return i['name']
+        return ""
+
+    def convert_sql_roles(self,sql_type):
+        """
+        Convert SQL data type to Laravel Validator Rule.
+        
+        :param sql_type: The SQL data type as a string.
+        :return: Laravel Validator Rule as a string.
+        """
+        sql_type = sql_type.lower()
+        
+        # Mapping SQL data types to Laravel Validator Rules
+        type_mapping = {
+            "varchar": lambda size: f"string|max:{size[0]}" if size else "string",
+            "char": lambda size: f"string|max:{size[0]}" if size else "string",
+            "text": lambda _: "string",
+            "integer": lambda _: "integer",
+            "int": lambda _: "integer",
+            "smallint": lambda _: "integer",
+            "bigint": lambda _: "integer",
+            "decimal": lambda args: f"numeric:{args[0]},{args[1]}" if len(args) == 2 else "numeric",
+            "numeric": lambda args: f"numeric:{args[0]},{args[1]}" if len(args) == 2 else "numeric",
+            "float": lambda _: "numeric",
+            "real": lambda _: "numeric",
+            "double": lambda _: "numeric",
+            "boolean": lambda _: "boolean",
+            "tinyint": lambda size: "boolean" if size == "1" else "integer",
+            "date": lambda _: "date|date_format:Y-m-d",
+            "datetime": lambda _: "date|date_format:Y-m-d H:i:s",
+            "timestamp": lambda _: "date|date_format:Y-m-d H:i:s",
+            "time": lambda _: "date_format:H:i:s",
+            "year": lambda _: "digits:4",
+            "blob": lambda _: "file",
+            "longblob": lambda _: "file",
+            "json": lambda _: "json",
+            "enum": lambda args: f"in:{','.join(args)}",
+            "set": lambda _: "array",
+            "uuid": lambda _: "uuid",
+            "ip address": lambda _: "ip",
+            "email": lambda size: f"email|max:{size}" if size else "email",
+        }
+
+        # Extract type and parameters
+        match = re.match(r"(\w+)(?:\((.*?)\))?", sql_type)
+        if not match:
+            return "unknown"
+        
+        base_type = match.group(1)
+        args = match.group(2)
+        args_list = args.split(",") if args else []
+
+        # Remove quotes and trim whitespace from args
+        args_list = [arg.strip().strip("'").strip('"') for arg in args_list]
+
+        # Determine the conversion rule
+        converter = type_mapping.get(base_type)
+        if converter:
+            return converter(args_list)
+        else:
+            return "unknown"
+    
+    def cek_out_type(self, i, refs_data, max_length=10):
+        #print(i)
+        is_null = "nullable" if i["null"] else "required"
+        typ     = self.convert_sql_roles( i["type"] )
+        li= i["name"]
+        ri= f'"{is_null}|{ typ }"'
+        return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
 
 
     def json_to_model(self, table_data, refs_data):
@@ -74,7 +158,14 @@ class MetaToController:
         #-------------------------------------------------
         mod+= '    //roles--------------------------------------------------\n'
         mod+= '    protected function getValidationRules($id = null){ \n'
-        mod+= '        return[]; \n'
+        mod+= '        return[\n'
+        #-------------------------------------------------
+        max_length = max(len(i['name']) for i in columns)
+        for i in columns:
+            if(i['name'] != 'created_at' and i['name'] != 'updated_at' and i['name'] != 'id' ):
+                mod+= self.cek_out_type(i, refs_data=refs_data, max_length=max_length)
+        #-------------------------------------------------
+        mod+= '        ]; \n'
         mod+= '    }\n'
         mod+= '    //end_roles----------------------------------------------\n\n\n'
         #-------------------------------------------------
