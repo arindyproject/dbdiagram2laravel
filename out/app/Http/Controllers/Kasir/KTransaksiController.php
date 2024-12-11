@@ -24,8 +24,8 @@ Class KTransaksiController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "id_customer" => "nullable|integer", 
-            "id_kasir"    => "nullable|integer", 
+            "id_customer" => "nullable|integer" , 
+            "id_kasir"    => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------

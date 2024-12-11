@@ -24,10 +24,10 @@ Class KCustomerController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "name"       => "required|string|max:255", 
-            "alamat"     => "nullable|string", 
-            "no_tlp"     => "nullable|string|max:255", 
-            "id_author"  => "nullable|integer", 
+            "name"       => "required|string|max:255" , 
+            "alamat"     => "nullable|string" , 
+            "no_tlp"     => "nullable|string|max:255" , 
+            "id_author"  => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------

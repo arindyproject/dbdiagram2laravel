@@ -24,9 +24,9 @@ Class UserController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "name"       => "nullable|string|max:255", 
-            "alamat"     => "nullable|string", 
-            "id_kelamin" => "nullable|integer", 
+            "name"       => "nullable|string|max:255" , 
+            "alamat"     => "nullable|string" , 
+            "id_kelamin" => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------

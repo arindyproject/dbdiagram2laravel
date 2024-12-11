@@ -1,4 +1,4 @@
-import re
+import re, json
 
 class DiagramToMeta:
     def __init__(self, text_input):
@@ -141,7 +141,7 @@ class DiagramToMeta:
                     'null': len(items) < 3,
                     'increment': False,
                     'attributes': '',
-                    'is_unique' : self.ck_is_unique(result)
+                    'is_unique' : False
                 }
 
                 if 'id_' in items[0] or '_id' in items[0]:
@@ -150,7 +150,7 @@ class DiagramToMeta:
                 match = re.search(r"\[(.*?)\]", line)
                 if match:
                     result = re.split(r",\s*", match.group(1))
-                    
+                    tmp['is_unique'] = self.ck_is_unique(result)
                     tmp['increment'] = self.ck_is_increment(result)
                     tmp['primary'] = self.ck_is_primary(result)
                     tmp['null'] = self.ck_is_null(result)
@@ -169,7 +169,6 @@ class DiagramToMeta:
             'table': table_name,
             'items': items_field
         }
-
         return result
 
     def get_tabels(self):

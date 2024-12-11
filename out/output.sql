@@ -1,81 +1,81 @@
 CREATE TABLE IF NOT EXISTS users (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255) NULL,
-  alamat text NULL,
-  id_kelamin bigint UNSIGNED NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  name varchar(255)  NULL,
+  alamat text  NULL,
+  id_kelamin bigint  UNSIGNED NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_jenis (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  id_author bigint UNSIGNED NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  name varchar(255)  NOT NULL,
+  id_author bigint  UNSIGNED NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_satuan (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  id_author bigint UNSIGNED NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  name varchar(255)  NOT NULL,
+  id_author bigint  UNSIGNED NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_produk (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  keterangan text NULL,
-  harga decimal(10,2) NULL,
-  diskon decimal(5,2) NULL,
-  ppn decimal(5,2) NULL DEFAULT 11.0,
-  id_jenis bigint UNSIGNED NULL,
-  id_satuan bigint UNSIGNED NULL,
-  id_author bigint UNSIGNED NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  name varchar(255)  NOT NULL,
+  keterangan text  NULL,
+  harga decimal(10,2)  NULL,
+  diskon decimal(5,2)  NULL,
+  ppn decimal(5,2)  NULL DEFAULT 11.0,
+  id_jenis bigint  UNSIGNED NULL,
+  id_satuan bigint  UNSIGNED NULL,
+  id_author bigint  UNSIGNED NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_customer (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  alamat text NULL,
-  no_tlp varchar(255) NULL,
-  id_author bigint UNSIGNED NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  name varchar(255)  NOT NULL,
+  alamat text  NULL,
+  no_tlp varchar(255)  NULL,
+  id_author bigint  UNSIGNED NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_kartu (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  kode_member varchar(255) NOT NULL,
-  id_user bigint UNSIGNED NOT NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  kode_member varchar(255) UNIQUE NOT NULL,
+  id_user bigint  UNSIGNED NOT NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_transaksi (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_customer bigint UNSIGNED NULL,
-  id_kasir bigint UNSIGNED NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_customer bigint  UNSIGNED NULL,
+  id_kasir bigint  UNSIGNED NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS k_transaksi_items (
-  id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_transaksi bigint UNSIGNED NOT NULL,
-  id_produk bigint UNSIGNED NOT NULL,
-  jumlah int NOT NULL,
-  harga decimal(10,2) NOT NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
+  id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_transaksi bigint  UNSIGNED NOT NULL,
+  id_produk bigint  UNSIGNED NOT NULL,
+  jumlah int  NOT NULL,
+  harga decimal(10,2)  NOT NULL,
+  created_at timestamp  NULL DEFAULT NULL,
+  updated_at timestamp  NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 

@@ -26,7 +26,8 @@ class MetaToSql:
 
         column_definitions = []
         for col in columns:
-            column_def = f"  {col['name']} {col['type']}"
+            unique = "UNIQUE" if col['is_unique'] else ""
+            column_def = f"  {col['name']} {col['type']} {unique}"
 
             # Tambahkan atribut jika ada
             if col.get("attributes"):

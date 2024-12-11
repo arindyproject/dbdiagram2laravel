@@ -29,14 +29,12 @@ class MetaToController:
             return "User"
         return ''.join(word.capitalize() for word in input_text.split('_'))
     
-
     def get_class_rel_dir(self, table_data, table_name):
         for i in table_data:
             if(i['table'] == table_name):
                 return f"App\Http\Controllers{self.dir}\\" + ( i['dir'] + "\\" ) if i['dir'] else f"App\Http\Controllers{self.dir}\\"
         return f"App\Http\Controllers{self.dir}\\"
     
-
     def cek_name_tbl_out_type(self, table_name):
         table_data = self.json_data['tabels']
         tbl = []
@@ -112,12 +110,17 @@ class MetaToController:
         else:
             return "unknown"
     
-    def cek_out_type(self, i, refs_data, max_length=10):
+    def cek_validation(self, i, table_name, max_length=10):
         #print(i)
         is_null = "nullable" if i["null"] else "required"
         typ     = self.convert_sql_roles( i["type"] )
         li= i["name"]
-        ri= f'"{is_null}|{ typ }"'
+
+        uni= f'|unique:{table_name}'  if i['is_unique'] else ''
+        upd= f".($id ? ',{i["name"]},' . $id . ',id'  : '')" if i['is_unique'] else ''
+
+        ri= f'"{is_null}|{ typ }{uni}" {upd}'
+
         return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
 
 
@@ -163,7 +166,7 @@ class MetaToController:
         max_length = max(len(i['name']) for i in columns)
         for i in columns:
             if(i['name'] != 'created_at' and i['name'] != 'updated_at' and i['name'] != 'id' ):
-                mod+= self.cek_out_type(i, refs_data=refs_data, max_length=max_length)
+                mod+= self.cek_validation(i, table_name=table_name, max_length=max_length)
         #-------------------------------------------------
         mod+= '        ]; \n'
         mod+= '    }\n'

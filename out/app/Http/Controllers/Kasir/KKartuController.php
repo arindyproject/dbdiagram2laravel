@@ -24,8 +24,8 @@ Class KKartuController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "kode_member" => "required|string|max:255", 
-            "id_user"     => "required|integer", 
+            "kode_member" => "required|string|max:255|unique:k_kartu" .($id ? ',kode_member,' . $id . ',id'  : ''), 
+            "id_user"     => "required|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------

@@ -24,10 +24,10 @@ Class KTransaksiItemsController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "id_transaksi" => "required|integer", 
-            "id_produk"    => "required|integer", 
-            "jumlah"       => "required|integer", 
-            "harga"        => "required|numeric:10,2", 
+            "id_transaksi" => "required|integer" , 
+            "id_produk"    => "required|integer" , 
+            "jumlah"       => "required|integer" , 
+            "harga"        => "required|numeric:10,2" , 
         ]; 
     }
     //end_roles----------------------------------------------

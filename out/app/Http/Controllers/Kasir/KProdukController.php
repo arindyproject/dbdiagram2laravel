@@ -24,14 +24,14 @@ Class KProdukController extends Controller {
     //roles--------------------------------------------------
     protected function getValidationRules($id = null){ 
         return[
-            "name"       => "required|string|max:255", 
-            "keterangan" => "nullable|string", 
-            "harga"      => "nullable|numeric:10,2", 
-            "diskon"     => "nullable|numeric:5,2", 
-            "ppn"        => "nullable|numeric:5,2", 
-            "id_jenis"   => "nullable|integer", 
-            "id_satuan"  => "nullable|integer", 
-            "id_author"  => "nullable|integer", 
+            "name"       => "required|string|max:255" , 
+            "keterangan" => "nullable|string" , 
+            "harga"      => "nullable|numeric:10,2" , 
+            "diskon"     => "nullable|numeric:5,2" , 
+            "ppn"        => "nullable|numeric:5,2" , 
+            "id_jenis"   => "nullable|integer" , 
+            "id_satuan"  => "nullable|integer" , 
+            "id_author"  => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------
