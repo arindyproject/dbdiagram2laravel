@@ -33,8 +33,103 @@ Class KTransaksiItemsController extends Controller {
     //end_roles----------------------------------------------
 
 
+    //list with search functionality-----------------------------------
+    public function search(Request $request){
+        // Retrieve a list of all data with "id" as value and "name" as label.
+        // Allows filtering with a search query using the LIKE operator.
+        // If the "name" field is unavailable, it will use the second column after "id".
+        try {
+            // Get search parameter from the request
+            //-----------------------------------------------
+            $search = $request->input("q", "");
+
+            // Query the database to select "id" and the appropriate name field, with optional search filter
+            //-----------------------------------------------
+            $record = $this->model->select("id", "id_transaksi")
+                ->when($search, function ($query) use ($search) {
+                    $query->where("id_transaksi", "LIKE", "%" . $search . "%");
+                })
+                ->get();
+            //-----------------------------------------------
+
+            // Check if any records are found
+            //-----------------------------------------------
+            if ($record->count() < 1) {
+                return response(
+                    new BaseResource(false, "No matching data found"),
+                    404
+                );
+            }
+            //-----------------------------------------------
+
+            // Map the data to a key-value structure (value = id, name = name)
+            //-----------------------------------------------
+            $data = $record->map(function ($item) {
+                return [
+                    "value" => $item->id,
+                    "name"  => $item->id_transaksi ?? "Unnamed"
+                ];
+            });
+            //-----------------------------------------------
+
+            // Return the mapped data as a successful response
+            //-----------------------------------------------
+            return response(
+                new BaseResource(true, "Data retrieved successfully", $data),
+                200
+            );
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the process
+            //-----------------------------------------------
+            return response(
+                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")"),
+                442
+            );
+        }
+    }
+    //end_list with search functionality-------------------------------
+
+
     //list---------------------------------------------------
     public function list(){
+        // Retrieve a list of all data with "id" as value and "name" as label.
+        // If the "name" or "nama" field is unavailable, it will use the second column after "id".
+        try {
+            // Query the database to select "id" and the appropriate name field
+            //-----------------------------------------------
+            $record = $this->model->select("id", "id_transaksi")->get();
+            //-----------------------------------------------
+            // Check if any records are found
+            if ($record->count() < 1) {
+                return response(
+                    new BaseResource(false, "Data not found"),
+                    404
+                );
+            }
+            //-----------------------------------------------
+
+            // Map the data to a key-value structure (value = id, name = name)
+            //-----------------------------------------------
+            $data = $record->map(function ($item) {
+                return [
+                    "value" => $item->id,
+                    "name"  => $item->id_transaksi ?? "Unnamed"
+                ];
+            });
+            //-----------------------------------------------
+            // Return the mapped data as a successful response
+            return response(
+                new BaseResource(true, "Data retrieved successfully", $data),
+                200
+            );
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the process
+            //-----------------------------------------------
+            return response(
+                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")"),
+                442
+            );
+        }
     }
     //end_list-----------------------------------------------
 
@@ -59,7 +154,7 @@ Class KTransaksiItemsController extends Controller {
                 new BaseResource(true, "Data successfully retrieved.", $this->res->make($record) )
             , 200);
             //-----------------------------------------------
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Handle any errors during retrieval
             return response(
                 new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")")
@@ -92,7 +187,7 @@ Class KTransaksiItemsController extends Controller {
             }
             return response(new BaseResource(true, "Data created successfully.", $this->res->make($record) ), 200);
             //-----------------------------------------------
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Handle any errors during retrieval
             return response(
                 new BaseResource(false, "An error occurred while creating data: (" . $e->getMessage() . ")")
@@ -126,7 +221,15 @@ Class KTransaksiItemsController extends Controller {
                 ), 442); 
             } 
             //-----------------------------------------------
-        } catch (Exception $e) {
+
+            //update data
+            //-----------------------------------------------
+            if(!$record->update($request->all()) ){
+                return response(new BaseResource(false, "Failed to update data."), 442);
+            }
+            return response(new BaseResource(true, "Data updated successfully.", $this->res->make($record) ), 200);
+            //-----------------------------------------------
+        } catch (\Exception $e) {
             // Handle any errors during retrieval
             return response(
                 new BaseResource(false, "An error occurred while updating data: (" . $e->getMessage() . ")")
@@ -164,7 +267,7 @@ Class KTransaksiItemsController extends Controller {
                 , 500);
             }
             //-----------------------------------------------
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Handle any errors during deletion
             return response(
                 new BaseResource(false, "An error occurred while deleting data: (" . $e->getMessage() . ")")

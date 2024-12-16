@@ -49,7 +49,7 @@ class MetaToController:
                     return i['name']
                 elif('nama' in i['name']):
                     return i['name']
-        return ""
+        return str(tbl['items'][1]['name'])
 
     def convert_sql_roles(self,sql_type):
         """
@@ -124,7 +124,7 @@ class MetaToController:
         return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
 
 
-    def json_to_model(self, table_data, refs_data):
+    def json_to_model(self, table_data):
         dir        = ( '\\' + table_data["dir"] ).replace('/','\\') if table_data["dir"] else ""
         table_name = table_data["table"]
         columns    = table_data["items"]
@@ -173,14 +173,110 @@ class MetaToController:
         mod+= '    //end_roles----------------------------------------------\n\n\n'
         #-------------------------------------------------
 
-        #list
+        #list with search functionality
         #-------------------------------------------------
-        mod+= '    //list---------------------------------------------------\n'
-        mod+= '    public function list(){\n'
+        mod += '    //list with search functionality-----------------------------------\n'
+        mod += '    public function search(Request $request){\n'
+        mod += '        // Retrieve a list of all data with "id" as value and "name" as label.\n'
+        mod += '        // Allows filtering with a search query using the LIKE operator.\n'
+        mod += '        // If the "name" field is unavailable, it will use the second column after "id".\n'
+        mod += '        try {\n'
+        mod += '            // Get search parameter from the request\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            $search = $request->input("q", "");\n'
+        mod += '\n'
+        mod += '            // Query the database to select "id" and the appropriate name field, with optional search filter\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += f'            $record = $this->model->select("id", "{self.cek_name_tbl_out_type(table_name)}")\n'
+        mod += '                ->when($search, function ($query) use ($search) {\n'
+        mod += f'                    $query->where("{self.cek_name_tbl_out_type(table_name)}", "LIKE", "%" . $search . "%");\n'
+        mod += '                })\n'
+        mod += '                ->get();\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '\n'
+        mod += '            // Check if any records are found\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            if ($record->count() < 1) {\n'
+        mod += '                return response(\n'
+        mod += '                    new BaseResource(false, "No matching data found"),\n'
+        mod += '                    404\n'
+        mod += '                );\n'
+        mod += '            }\n'
+        mod += '            //-----------------------------------------------\n\n'
+        mod += '            // Map the data to a key-value structure (value = id, name = name)\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            $data = $record->map(function ($item) {\n'
+        mod += '                return [\n'
+        mod += '                    "value" => $item->id,\n'
+        mod += f'                    "name"  => $item->{self.cek_name_tbl_out_type(table_name)} ?? "Unnamed"\n'
+        mod += '                ];\n'
+        mod += '            });\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '\n'
+        mod += '            // Return the mapped data as a successful response\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            return response(\n'
+        mod += '                new BaseResource(true, "Data retrieved successfully", $data),\n'
+        mod += '                200\n'
+        mod += '            );\n'
+        mod += '        } catch (\Exception $e) {\n'
+        mod += '            // Handle any exceptions that occur during the process\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            return response(\n'
+        mod += '                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")"),\n'
+        mod += '                442\n'
+        mod += '            );\n'
+        mod += '        }\n'
+        mod += '    }\n'
+        mod += '    //end_list with search functionality-------------------------------\n\n\n'
+        #-------------------------------------------------
 
-        mod+= '    }\n'
-        mod+= '    //end_list-----------------------------------------------\n\n\n'
+
+       #list
         #-------------------------------------------------
+        mod += '    //list---------------------------------------------------\n'
+        mod += '    public function list(){\n'
+        mod += '        // Retrieve a list of all data with "id" as value and "name" as label.\n'
+        mod += '        // If the "name" or "nama" field is unavailable, it will use the second column after "id".\n'
+        mod += '        try {\n'
+        mod += '            // Query the database to select "id" and the appropriate name field\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += f'            $record = $this->model->select("id", "{self.cek_name_tbl_out_type(table_name)}")->get();\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            // Check if any records are found\n'
+        mod += '            if ($record->count() < 1) {\n'
+        mod += '                return response(\n'
+        mod += '                    new BaseResource(false, "Data not found"),\n'
+        mod += '                    404\n'
+        mod += '                );\n'
+        mod += '            }\n'
+        mod += '            //-----------------------------------------------\n\n'
+        mod += '            // Map the data to a key-value structure (value = id, name = name)\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            $data = $record->map(function ($item) {\n'
+        mod += '                return [\n'
+        mod += '                    "value" => $item->id,\n'
+        mod += f'                    "name"  => $item->{self.cek_name_tbl_out_type(table_name)} ?? "Unnamed"\n'
+        mod += '                ];\n'
+        mod += '            });\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            // Return the mapped data as a successful response\n'
+        mod += '            return response(\n'
+        mod += '                new BaseResource(true, "Data retrieved successfully", $data),\n'
+        mod += '                200\n'
+        mod += '            );\n'
+        mod += '        } catch (\Exception $e) {\n'
+        mod += '            // Handle any exceptions that occur during the process\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            return response(\n'
+        mod += '                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")"),\n'
+        mod += '                442\n'
+        mod += '            );\n'
+        mod += '        }\n'
+        mod += '    }\n'
+        mod += '    //end_list-----------------------------------------------\n\n\n'
+        #-------------------------------------------------
+
 
         #show
         #-------------------------------------------------
@@ -203,7 +299,7 @@ class MetaToController:
         mod += '                new BaseResource(true, "Data successfully retrieved.", $this->res->make($record) )\n'
         mod += '            , 200);\n'
         mod += '            //-----------------------------------------------\n'
-        mod += '        } catch (Exception $e) {\n'
+        mod += '        } catch (\Exception $e) {\n'
         mod += '            // Handle any errors during retrieval\n'
         mod += '            return response(\n'
         mod += '                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")")\n'
@@ -237,7 +333,7 @@ class MetaToController:
         mod += '            }\n'
         mod += '            return response(new BaseResource(true, "Data created successfully.", $this->res->make($record) ), 200);\n'
         mod += '            //-----------------------------------------------\n'
-        mod += '        } catch (Exception $e) {\n'
+        mod += '        } catch (\Exception $e) {\n'
         mod += '            // Handle any errors during retrieval\n'
         mod += '            return response(\n'
         mod += '                new BaseResource(false, "An error occurred while creating data: (" . $e->getMessage() . ")")\n'
@@ -272,8 +368,15 @@ class MetaToController:
         mod += '                        [], $validator->errors()\n'
         mod += '                ), 442); \n'
         mod += '            } \n'
+        mod += '            //-----------------------------------------------\n\n'
+        mod += '            //update data\n'
         mod += '            //-----------------------------------------------\n'
-        mod += '        } catch (Exception $e) {\n'
+        mod += '            if(!$record->update($request->all()) ){\n'
+        mod += '                return response(new BaseResource(false, "Failed to update data."), 442);\n'
+        mod += '            }\n'
+        mod += '            return response(new BaseResource(true, "Data updated successfully.", $this->res->make($record) ), 200);\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '        } catch (\Exception $e) {\n'
         mod += '            // Handle any errors during retrieval\n'
         mod += '            return response(\n'
         mod += '                new BaseResource(false, "An error occurred while updating data: (" . $e->getMessage() . ")")\n'
@@ -312,7 +415,7 @@ class MetaToController:
         mod += '                , 500);\n'
         mod += '            }\n'
         mod += '            //-----------------------------------------------\n'
-        mod += '        } catch (Exception $e) {\n'
+        mod += '        } catch (\Exception $e) {\n'
         mod += '            // Handle any errors during deletion\n'
         mod += '            return response(\n'
         mod += '                new BaseResource(false, "An error occurred while deleting data: (" . $e->getMessage() . ")")\n'
@@ -355,7 +458,7 @@ class MetaToController:
         for i in table_data:
             if i['table'].lower() not in [exc_item.lower() for exc_item in self.exc]:
                 total_file += 1
-                d = self.json_to_model(i, refs_data)
+                d = self.json_to_model(i)
                 output_dir = models_dir + d['path']
                 
                 # Membuat folder jika belum ada
