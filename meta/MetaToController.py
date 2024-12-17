@@ -173,6 +173,119 @@ class MetaToController:
         mod+= '    //end_roles----------------------------------------------\n\n\n'
         #-------------------------------------------------
 
+        #table
+        #-------------------------------------------------
+        mod += '    //table-----------------------------------------------------------\n'
+        mod += '    public function table(Request $request){\n'
+        mod += '        try {\n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            //row : represents the number of records displayed per page, default: 20 \n'
+        mod += '            //Sorting data \n'
+        mod += '            //sort     : column_name \n'
+        mod += '            //direction: asc / desc \n'
+        mod += '            // Search  \n'
+        mod += '            /**  \n'
+        mod += '             * $search = [ \n'
+        mod += '             *      [ \n'
+        mod += '             *          "query"   : "column_name", \n'
+        mod += '             *          "mark"    : "LIKE",  // "=",">","<"  \n'
+        mod += '             *          "request" : "search request / input name in HTML"  \n'
+        mod += '             *      ],  \n'
+        mod += '             * ] \n'
+        mod += '             * **/ \n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            /** Postman example body \n'
+        mod += '            *{ \n'
+        mod += '            *    "page"      : 1, \n'
+        mod += '            *    "row"       : 30, \n'
+        mod +=f'            *    "sort"      : "{self.cek_name_tbl_out_type(table_name)}", \n'
+        mod += '            *    "direction" : "desc", \n'
+        mod +=f'            *    "search_{self.cek_name_tbl_out_type(table_name)}" : "na" \n'
+        mod += '            *} \n'
+        mod += '            * **/ \n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            $search = [ \n'
+        mod += '                [ \n'
+        mod +=f'                    "query"   => "{self.cek_name_tbl_out_type(table_name)}", \n'
+        mod += '                    "mark"    => "LIKE",  // "=",">","<"  \n'
+        mod +=f'                    "request" => "search_{self.cek_name_tbl_out_type(table_name)}"  \n'
+        mod += '                ],  \n'
+        mod += '            ]; \n'
+        mod += '            $row    = $request->input("row") ? $request->input("row") : 20; \n'
+        mod += '            $query  = $this->model->query(); //table data \n'
+        mod += '            //-----------------------------------------------\n'
+        mod += '            if ($request->has("sort")) { \n'
+        mod += '                $sortField = $request->input("sort"); \n'
+        mod += '                $sortDirection = $request->input("direction", "asc"); \n'
+        mod += '                $query->orderBy($sortField, $sortDirection); \n'
+        mod += '            } \n'
+        mod += '            //-----------------------------------------------\n'
+        mod += "            if(count($search) > 0){ \n"
+        mod += "                foreach ($search as $d) { \n"
+        mod += "                    if($request->has($d['request']) && $request->input($d['request'])){ \n"
+        mod += "                        $val =  $request->input($d['request']); \n"
+        mod += "                        if($d['type'] == 'date'){ \n"
+        mod += "                            $query->whereDate($d['query'], $d['mark'], $val)->get(); \n"
+        mod += "                        } \n"
+        mod += "                        else{ \n"
+        mod += "                            if($d['mark'] == 'LIKE'){ \n"
+        mod += "                                $query->where($d['query'], $d['mark'], '%'. $val . '%'); \n"
+        mod += "                            }else{ \n"
+        mod += "                                $query->where($d['query'], $d['mark'], $val); \n"
+        mod += "                            } \n"
+        mod += "                        } \n"                
+        mod += "                    } \n"
+        mod += "                } \n"
+        mod += "            } \n"
+        mod += '            //-----------------------------------------------\n'
+        mod += '            $data = $query->paginate($row); \n'
+        mod += '            //-----------------------------------------------\n'
+        mod += "            if($data){ \n"
+        mod += "                $datas = [ \n"
+        mod += "                    'data'       => $this->res->collection($data), \n"
+        mod += "                    'search'     => $search, \n"
+        mod += "                    'pagination' => [ \n"
+        mod += "                        'row'           => $row, \n"
+        mod += "                        'current_page'  => $data->currentPage(), \n"
+        mod += "                        'per_page'      => $data->perPage(), \n"
+        mod += "                        'max_page'      => ceil($data->total() / $data->perPage()), \n"
+        mod += "                        'total'         => $data->total(), \n"
+        mod += "                    ], \n"
+        mod += "                ]; \n"
+        mod += "                // Check if the data contains any records\n"
+        mod += "                if($data->total()){ \n"
+        mod += "                    // Success: Data is available and returned to the user\n"
+        mod += "                    return response( \n"
+        mod += "                        new BaseResource( \n"
+        mod += "                            true, \n"
+        mod += "                            $this->title . ' - Data successfully found.', \n"
+        mod += "                            $datas \n"
+        mod += "                        ), 200); \n"
+        mod += "                } \n"
+        mod += "                // No records found: Return a clean 'not found' response\n"
+        mod += "                return response( \n"
+        mod += "                    new BaseResource( \n"
+        mod += "                        false, \n"
+        mod += "                        $this->title . ' - No data found.', \n"
+        mod += "                        $datas \n"
+        mod += "                    ), 404); \n"
+        mod += "            }else{ \n"
+        mod += "                // Edge case: Data is null or an invalid request was made\n"
+        mod += "                return response( \n"
+        mod += "                    new BaseResource(false, $this->title . ' - No data available. Please verify your query.', [] \n"
+        mod += "                ), 404); \n"
+        mod += "            } \n"
+        mod += '            //-----------------------------------------------\n'
+        mod += '        } catch (\Exception $e) {\n'
+        mod += '            // Handle any errors during retrieval\n'
+        mod += '            return response(\n'
+        mod += '                new BaseResource(false, "An error occurred while retrieving data: (" . $e->getMessage() . ")")\n'
+        mod += '            , 442);\n'
+        mod += '        }\n'
+        mod += '    } \n'
+        mod += '    //end_table-------------------------------------------------------\n\n\n'
+        #-------------------------------------------------
+
         #list with search functionality
         #-------------------------------------------------
         mod += '    //list with search functionality-----------------------------------\n'
@@ -183,42 +296,43 @@ class MetaToController:
         mod += '        try {\n'
         mod += '            // Get search parameter from the request\n'
         mod += '            //-----------------------------------------------\n'
-        mod += '            $search = $request->input("q", "");\n'
-        mod += '\n'
-        mod += '            // Query the database to select "id" and the appropriate name field, with optional search filter\n'
-        mod += '            //-----------------------------------------------\n'
-        mod += f'            $record = $this->model->select("id", "{self.cek_name_tbl_out_type(table_name)}")\n'
-        mod += '                ->when($search, function ($query) use ($search) {\n'
-        mod += f'                    $query->where("{self.cek_name_tbl_out_type(table_name)}", "LIKE", "%" . $search . "%");\n'
-        mod += '                })\n'
-        mod += '                ->get();\n'
-        mod += '            //-----------------------------------------------\n'
-        mod += '\n'
-        mod += '            // Check if any records are found\n'
-        mod += '            //-----------------------------------------------\n'
-        mod += '            if ($record->count() < 1) {\n'
+        mod += '            if($request->filled("q")){ \n'
+        mod += '                //-----------------------------------------------\n'
+        mod += '                $search = $request->get("q");\n'
+        mod += f'                $record = $this->model->select("id", "{self.cek_name_tbl_out_type(table_name)}")\n'
+        mod += '                    ->when($search, function ($query) use ($search) {\n'
+        mod += f'                        $query->where("{self.cek_name_tbl_out_type(table_name)}", "LIKE", "%" . $search . "%");\n'
+        mod += '                    })->get();\n'
+        mod += '                //-----------------------------------------------\n'
+        mod += '                if ($record->count() < 1) {\n'
+        mod += '                    return response(\n'
+        mod += '                        new BaseResource(false, "No matching data found"),\n'
+        mod += '                        404\n'
+        mod += '                    );\n'
+        mod += '                }\n'
+        mod += '                //-----------------------------------------------\n\n'
+        mod += '                // Map the data to a key-value structure (value = id, name = name)\n'
+        mod += '                //-----------------------------------------------\n'
+        mod += '                $data = $record->map(function ($item) {\n'
+        mod += '                    return [\n'
+        mod += '                        "value" => $item->id,\n'
+        mod += f'                        "name"  => $item->{self.cek_name_tbl_out_type(table_name)} ?? "Unnamed"\n'
+        mod += '                    ];\n'
+        mod += '                });\n'
+        mod += '                //-----------------------------------------------\n\n'   
+        mod += '                // Return the mapped data as a successful response\n'
+        mod += '                //-----------------------------------------------\n'
         mod += '                return response(\n'
-        mod += '                    new BaseResource(false, "No matching data found"),\n'
-        mod += '                    404\n'
+        mod += '                    new BaseResource(true, "Data retrieved successfully", $data),\n'
+        mod += '                    200\n'
         mod += '                );\n'
         mod += '            }\n'
-        mod += '            //-----------------------------------------------\n\n'
-        mod += '            // Map the data to a key-value structure (value = id, name = name)\n'
-        mod += '            //-----------------------------------------------\n'
-        mod += '            $data = $record->map(function ($item) {\n'
-        mod += '                return [\n'
-        mod += '                    "value" => $item->id,\n'
-        mod += f'                    "name"  => $item->{self.cek_name_tbl_out_type(table_name)} ?? "Unnamed"\n'
-        mod += '                ];\n'
-        mod += '            });\n'
-        mod += '            //-----------------------------------------------\n'
-        mod += '\n'
-        mod += '            // Return the mapped data as a successful response\n'
         mod += '            //-----------------------------------------------\n'
         mod += '            return response(\n'
-        mod += '                new BaseResource(true, "Data retrieved successfully", $data),\n'
-        mod += '                200\n'
+        mod += '                new BaseResource(false, "Please provide the query first!!!"),\n'
+        mod += '                442\n'
         mod += '            );\n'
+        mod += '            //-----------------------------------------------\n'
         mod += '        } catch (\Exception $e) {\n'
         mod += '            // Handle any exceptions that occur during the process\n'
         mod += '            //-----------------------------------------------\n'
