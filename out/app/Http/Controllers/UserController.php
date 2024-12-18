@@ -47,6 +47,7 @@ Class UserController extends Controller {
              *          "query"   : "column_name", 
              *          "mark"    : "LIKE",  // "=",">","<"  
              *          "request" : "search request / input name in HTML"  
+             *          "type"    : "text", 
              *      ],  
              * ] 
              * **/ 
@@ -65,7 +66,8 @@ Class UserController extends Controller {
                 [ 
                     "query"   => "name", 
                     "mark"    => "LIKE",  // "=",">","<"  
-                    "request" => "search_name"  
+                    "request" => "search_name",  
+                    "type"    => "text",  
                 ],  
             ]; 
             $row    = $request->input("row") ? $request->input("row") : 20; 

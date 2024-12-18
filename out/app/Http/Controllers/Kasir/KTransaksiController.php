@@ -46,6 +46,7 @@ Class KTransaksiController extends Controller {
              *          "query"   : "column_name", 
              *          "mark"    : "LIKE",  // "=",">","<"  
              *          "request" : "search request / input name in HTML"  
+             *          "type"    : "text", 
              *      ],  
              * ] 
              * **/ 
@@ -64,7 +65,8 @@ Class KTransaksiController extends Controller {
                 [ 
                     "query"   => "id_customer", 
                     "mark"    => "LIKE",  // "=",">","<"  
-                    "request" => "search_id_customer"  
+                    "request" => "search_id_customer",  
+                    "type"    => "text",  
                 ],  
             ]; 
             $row    = $request->input("row") ? $request->input("row") : 20; 

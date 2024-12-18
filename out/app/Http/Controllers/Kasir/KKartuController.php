@@ -46,6 +46,7 @@ Class KKartuController extends Controller {
              *          "query"   : "column_name", 
              *          "mark"    : "LIKE",  // "=",">","<"  
              *          "request" : "search request / input name in HTML"  
+             *          "type"    : "text", 
              *      ],  
              * ] 
              * **/ 
@@ -64,7 +65,8 @@ Class KKartuController extends Controller {
                 [ 
                     "query"   => "kode_member", 
                     "mark"    => "LIKE",  // "=",">","<"  
-                    "request" => "search_kode_member"  
+                    "request" => "search_kode_member",  
+                    "type"    => "text",  
                 ],  
             ]; 
             $row    = $request->input("row") ? $request->input("row") : 20; 
