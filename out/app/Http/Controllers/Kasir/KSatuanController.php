@@ -25,7 +25,6 @@ Class KSatuanController extends Controller {
     protected function getValidationRules($id = null){ 
         return[
             "name"       => "required|string|max:255" , 
-            "id_author"  => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------
@@ -290,6 +289,11 @@ Class KSatuanController extends Controller {
                         [], $validator->errors()
                 ), 442); 
             } 
+            //-----------------------------------------------
+
+            //author
+            //-----------------------------------------------
+            $request["id_author"] = Auth::user()->id; 
             //-----------------------------------------------
 
             //add new data

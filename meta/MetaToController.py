@@ -112,16 +112,18 @@ class MetaToController:
     
     def cek_validation(self, i, table_name, max_length=10):
         #print(i)
-        is_null = "nullable" if i["null"] else "required"
-        typ     = self.convert_sql_roles( i["type"] )
-        li= i["name"]
+        if(i["name"] != 'id_author' and i["name"] != 'author_id' and i["name"] != 'id_editor' and i["name"] != 'editor_id'):
+            is_null = "nullable" if i["null"] else "required"
+            typ     = self.convert_sql_roles( i["type"] )
+            li= i["name"]
 
-        uni= f'|unique:{table_name}'  if i['is_unique'] else ''
-        upd= f".($id ? ',{i["name"]},' . $id . ',id'  : '')" if i['is_unique'] else ''
+            uni= f'|unique:{table_name}'  if i['is_unique'] else ''
+            upd= f".($id ? ',{i["name"]},' . $id . ',id'  : '')" if i['is_unique'] else ''
 
-        ri= f'"{is_null}|{ typ }{uni}" {upd}'
+            ri= f'"{is_null}|{ typ }{uni}" {upd}'
 
-        return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
+            return f'            "{li}"{" " * (max_length - len(li))} => {ri}, \n'
+        return ""
 
 
     def json_to_model(self, table_data):
@@ -441,6 +443,14 @@ class MetaToController:
         mod += '                ), 442); \n'
         mod += '            } \n'
         mod += '            //-----------------------------------------------\n\n'
+
+        for i in columns:
+            if(i['name'] == 'id_author' or i['name'] == 'author_id'):
+                mod += '            //author\n'
+                mod += '            //-----------------------------------------------\n'
+                mod +=f'            $request["{i['name']}"] = Auth::user()->id; \n'
+                mod += '            //-----------------------------------------------\n\n'
+
         mod += '            //add new data\n'
         mod += '            //-----------------------------------------------\n'
         mod += '            $record = $this->model->create($request->all());\n'
@@ -485,6 +495,14 @@ class MetaToController:
         mod += '                ), 442); \n'
         mod += '            } \n'
         mod += '            //-----------------------------------------------\n\n'
+
+        for i in columns:
+            if(i['name'] == 'id_editor' or i['name'] == 'editor_id'):
+                mod += '            //editor\n'
+                mod += '            //-----------------------------------------------\n'
+                mod +=f'            $request["{i['name']}"] = Auth::user()->id; \n'
+                mod += '            //-----------------------------------------------\n\n'
+
         mod += '            //update data\n'
         mod += '            //-----------------------------------------------\n'
         mod += '            if(!$record->update($request->all()) ){\n'

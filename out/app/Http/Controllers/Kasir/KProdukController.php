@@ -31,7 +31,6 @@ Class KProdukController extends Controller {
             "ppn"        => "nullable|numeric:5,2" , 
             "id_jenis"   => "nullable|integer" , 
             "id_satuan"  => "nullable|integer" , 
-            "id_author"  => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------
@@ -296,6 +295,11 @@ Class KProdukController extends Controller {
                         [], $validator->errors()
                 ), 442); 
             } 
+            //-----------------------------------------------
+
+            //author
+            //-----------------------------------------------
+            $request["id_author"] = Auth::user()->id; 
             //-----------------------------------------------
 
             //add new data

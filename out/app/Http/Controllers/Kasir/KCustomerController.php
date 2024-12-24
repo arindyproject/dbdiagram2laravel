@@ -27,7 +27,6 @@ Class KCustomerController extends Controller {
             "name"       => "required|string|max:255" , 
             "alamat"     => "nullable|string" , 
             "no_tlp"     => "nullable|string|max:255" , 
-            "id_author"  => "nullable|integer" , 
         ]; 
     }
     //end_roles----------------------------------------------
@@ -292,6 +291,11 @@ Class KCustomerController extends Controller {
                         [], $validator->errors()
                 ), 442); 
             } 
+            //-----------------------------------------------
+
+            //author
+            //-----------------------------------------------
+            $request["id_author"] = Auth::user()->id; 
             //-----------------------------------------------
 
             //add new data
