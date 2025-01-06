@@ -43,6 +43,7 @@ Class KTransaksiController extends Controller {
             /**  
              * $search = [ 
              *      [ 
+             *          "label"   : "label_name", 
              *          "query"   : "column_name", 
              *          "mark"    : "LIKE",  // "=",">","<"  
              *          "request" : "search request / input name in HTML"  

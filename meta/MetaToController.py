@@ -189,6 +189,7 @@ class MetaToController:
         mod += '            /**  \n'
         mod += '             * $search = [ \n'
         mod += '             *      [ \n'
+        mod += '             *          "label"   : "label_name", \n'
         mod += '             *          "query"   : "column_name", \n'
         mod += '             *          "mark"    : "LIKE",  // "=",">","<"  \n'
         mod += '             *          "request" : "search request / input name in HTML"  \n'
