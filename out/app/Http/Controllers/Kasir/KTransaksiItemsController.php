@@ -65,6 +65,7 @@ Class KTransaksiItemsController extends Controller {
             //-----------------------------------------------
             $search = [ 
                 [ 
+                    "label"   => "id_transaksi", 
                     "query"   => "id_transaksi", 
                     "mark"    => "LIKE",  // "=",">","<"  
                     "request" => "search_id_transaksi",  

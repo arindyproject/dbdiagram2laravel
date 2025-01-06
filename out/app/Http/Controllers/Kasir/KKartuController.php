@@ -63,6 +63,7 @@ Class KKartuController extends Controller {
             //-----------------------------------------------
             $search = [ 
                 [ 
+                    "label"   => "kode_member", 
                     "query"   => "kode_member", 
                     "mark"    => "LIKE",  // "=",">","<"  
                     "request" => "search_kode_member",  

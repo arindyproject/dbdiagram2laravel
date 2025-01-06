@@ -64,6 +64,7 @@ Class KCustomerController extends Controller {
             //-----------------------------------------------
             $search = [ 
                 [ 
+                    "label"   => "name", 
                     "query"   => "name", 
                     "mark"    => "LIKE",  // "=",">","<"  
                     "request" => "search_name",  

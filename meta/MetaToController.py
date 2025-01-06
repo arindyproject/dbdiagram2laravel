@@ -209,6 +209,7 @@ class MetaToController:
         mod += '            //-----------------------------------------------\n'
         mod += '            $search = [ \n'
         mod += '                [ \n'
+        mod +=f'                    "label"   => "{self.cek_name_tbl_out_type(table_name)}", \n'
         mod +=f'                    "query"   => "{self.cek_name_tbl_out_type(table_name)}", \n'
         mod += '                    "mark"    => "LIKE",  // "=",">","<"  \n'
         mod +=f'                    "request" => "search_{self.cek_name_tbl_out_type(table_name)}",  \n'
