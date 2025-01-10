@@ -12,7 +12,7 @@ import json
 def main():
     parser = argparse.ArgumentParser(description="Process metadata and generate SQL or models.")
     parser.add_argument("-i", "--input", required=True, help="Input file containing JSON metadata.")
-    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res", "controller"], help="Mode of operation.")
+    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res", "controller", "route"], help="Mode of operation.")
     parser.add_argument("-e", "--exc",   nargs="*",     default=[], help="List of columns to exception (optional).")
     parser.add_argument("-d", "--dir",   nargs="*",     help="Directory (optional).")
     
@@ -78,6 +78,8 @@ print('| -m / --mode  : Mode of operation.                     |')
 print('|     Modes:                                            |')
 print('|       mysql/sql  -> Generate SQL file                 |')
 print('|       migrate    -> Generate Laravel migration        |')
+print('|       controller -> Generate Laravel controller       |')
+print('|       route      -> Generate Laravel route            |')
 print('|       model      -> Generate Laravel Model            |')
 print('|       res        -> Generate Laravel Resources        |')
 print('|       all        -> Generate ALL Modes                |')
