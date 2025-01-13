@@ -118,7 +118,7 @@ class MetaToController:
             li= i["name"]
 
             uni= f'|unique:{table_name}'  if i['is_unique'] else ''
-            upd= f".($id ? ',{i["name"]},' . $id . ',id'  : '')" if i['is_unique'] else ''
+            upd= f".($id ? ',{i['name']},' . $id . ',id'  : '')" if i['is_unique'] else ''
 
             ri= f'"{is_null}|{ typ }{uni}" {upd}'
 
@@ -450,7 +450,7 @@ class MetaToController:
             if(i['name'] == 'id_author' or i['name'] == 'author_id'):
                 mod += '            //author\n'
                 mod += '            //-----------------------------------------------\n'
-                mod +=f'            $request["{i['name']}"] = Auth::user()->id; \n'
+                mod +=f'            $request["' +i['name'] + '"] = Auth::user()->id; \n'
                 mod += '            //-----------------------------------------------\n\n'
 
         mod += '            //add new data\n'
@@ -502,7 +502,7 @@ class MetaToController:
             if(i['name'] == 'id_editor' or i['name'] == 'editor_id'):
                 mod += '            //editor\n'
                 mod += '            //-----------------------------------------------\n'
-                mod +=f'            $request["{i['name']}"] = Auth::user()->id; \n'
+                mod +=f'            $request["'+i['name']+'"] = Auth::user()->id; \n'
                 mod += '            //-----------------------------------------------\n\n'
 
         mod += '            //update data\n'
