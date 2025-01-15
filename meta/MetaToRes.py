@@ -62,9 +62,9 @@ class MetaToRes:
         elif(i['type'] == 'datetime'):
             ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d h:i:s") : ""'
         elif(i['type'] == 'date'):
-            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("Y-m-d") : ""'
+            ri = f'$this->{i["name"]} ?  \Carbon\Carbon::parse($this->{i["name"]})->isoFormat("Y-MM-D") : ""'
         elif(i['type'] == 'time'):
-            ri = f'$this->{i["name"]} ? $this->{i["name"]}->format("h:i:s") : ""'
+            ri = f'$this->{i["name"]} ?  \Carbon\Carbon::parse($this->{i["name"]})->format("h:i") : ""'
         #---------------------------------------------------------
         elif(i['type'] == 'bigint' or i['type'] == 'int'):
             if('id_' in i['name'] or '_id' in i['name']):
