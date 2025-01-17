@@ -15,6 +15,22 @@ class MetaToMigrate:
             raise ValueError("Input harus berupa string JSON atau list dictionary.")
         
         self.exc = exc
+
+    
+    def check_type(self, type, name):
+        if( ('id_' in name or '_id' in name) and type == 'bigint'):
+            return "unsignedBigInteger('"+name+"')"
+        else:
+            if('varchar' in type):
+                return "string('"+name+"')"
+            elif('text' in type):
+                return "text('"+name+"')"
+            elif('int' in type or "integer" in type):
+                return "integer('"+name+"')"
+            elif('bigint' in type):
+                return "bigInteger('"+name+"')"
+            else:
+                return type
     
 
     def json_to_model(self, table_data, refs_data):
@@ -36,11 +52,16 @@ class MetaToMigrate:
         mod+= '    public function up(): void { \n'
         mod+= "        Schema::create('"+table_name+"', function (Blueprint $table) { \n"
         mod+= "            $table->id(); \n"
-        #---------------------------------------------------------------------------
         mod+= "            //-------------------------------------------------------\n"
+        #---------------------------------------------------------------------------
+        
+        for i in columns:
+            if(i['name'] != "id" and i['name'] != "created_at" and i['name'] != "updated_at"):
+                mod+= "            $table->"+ self.check_type(i['type'], i['name']) + "; \n"
 
-        mod+= "            //-------------------------------------------------------\n"
+        
         #---------------------------------------------------------------------------
+        mod+= "            //-------------------------------------------------------\n"
         mod+= "            $table->timestamps(); \n"
         mod+= "        });\n"
         mod+= '    } \n\n'

@@ -1,0 +1,650 @@
+{
+    "tabels": [
+        {
+            "dir": "",
+            "table": "users",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "alamat",
+                    "type": "text",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "id_kelamin",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": false
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_jenis",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "id_author",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_satuan",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "id_author",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_produk",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "keterangan",
+                    "type": "text",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "harga",
+                    "type": "decimal(10,2)",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "diskon",
+                    "type": "decimal(5,2)",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "ppn",
+                    "type": "decimal(5,2)",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": 11.0
+                },
+                {
+                    "name": "id_jenis",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "id_satuan",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "id_author",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_customer",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "alamat",
+                    "type": "text",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "no_tlp",
+                    "type": "varchar(255)",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false
+                },
+                {
+                    "name": "id_author",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_kartu",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "kode_member",
+                    "type": "varchar(255)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": true,
+                    "primary": false
+                },
+                {
+                    "name": "id_user",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_transaksi",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_customer",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "id_kasir",
+                    "type": "bigint",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        },
+        {
+            "dir": "Kasir",
+            "table": "k_transaksi_items",
+            "items": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": true,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_transaksi",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "id_produk",
+                    "type": "bigint",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "UNSIGNED",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "jumlah",
+                    "type": "int",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "harga",
+                    "type": "decimal(10,2)",
+                    "null": false,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "null": true,
+                    "increment": false,
+                    "attributes": "",
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "null"
+                }
+            ]
+        }
+    ],
+    "refs": [
+        {
+            "tb1": {
+                "name": "users",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_jenis",
+                "ref": "id_author"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "users",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_satuan",
+                "ref": "id_author"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "users",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_produk",
+                "ref": "id_author"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_jenis",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_produk",
+                "ref": "id_jenis"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_satuan",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_produk",
+                "ref": "id_satuan"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_customer",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_kartu",
+                "ref": "id_user"
+            },
+            "mark": "-",
+            "att": {
+                "delete": "cascade"
+            }
+        },
+        {
+            "tb1": {
+                "name": "users",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_customer",
+                "ref": "id_author"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_customer",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_transaksi",
+                "ref": "id_customer"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "users",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_transaksi",
+                "ref": "id_kasir"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "set null"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_produk",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_transaksi_items",
+                "ref": "id_produk"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "cascade"
+            }
+        },
+        {
+            "tb1": {
+                "name": "k_transaksi",
+                "ref": "id"
+            },
+            "tb2": {
+                "name": "k_transaksi_items",
+                "ref": "id_transaksi"
+            },
+            "mark": "<",
+            "att": {
+                "delete": "cascade"
+            }
+        }
+    ]
+}

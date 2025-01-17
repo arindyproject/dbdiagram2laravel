@@ -220,7 +220,17 @@ class DiagramToMeta:
         """
         Menggabungkan hasil tabel dan referensi menjadi metadata JSON.
         """
-        return {
+        result = {
             'tabels': self.get_tabels(),
             'refs'  : self.get_refs()
         }
+
+        # Menyimpan hasil ke file JSON
+        try:
+            with open('metadata.json', 'w') as json_file:
+                json.dump(result, json_file, indent=4)
+            print("Data berhasil disimpan ke metadata.json")
+        except Exception as e:
+            print(f"Terjadi kesalahan saat menyimpan file JSON: {e}")
+
+        return result

@@ -4,6 +4,7 @@ from meta.MetaToModel   import MetaToModel
 from meta.MetaToRes     import MetaToRes
 from meta.MetaToController     import MetaToController
 from meta.MetaToRoute   import MetaToRoute
+from meta.MetaToMigrate import MetaToMigrate
 
 import argparse
 import json
@@ -12,7 +13,7 @@ import json
 def main():
     parser = argparse.ArgumentParser(description="Process metadata and generate SQL or models.")
     parser.add_argument("-i", "--input", required=True, help="Input file containing JSON metadata.")
-    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res", "controller", "route"], help="Mode of operation.")
+    parser.add_argument("-m", "--mode",  required=True, choices=["all", "mysql", "sql", "migrate", "model", "res", "controller", "route", "migrate"], help="Mode of operation.")
     parser.add_argument("-e", "--exc",   nargs="*",     default=[], help="List of columns to exception (optional).")
     parser.add_argument("-d", "--dir",   nargs="*",     help="Directory (optional).")
     
@@ -46,6 +47,9 @@ def main():
         converter = MetaToRoute(result, exc=args.exc, dir=args.dir)
         converter.process_and_save()
 
+        converter = MetaToMigrate(result, exc=args.exc)
+        converter.process_and_save()
+
     #-------------------------------------------------
     elif args.mode == "mysql" or args.mode == "sql":
         converter = MetaToSql(result)
@@ -63,6 +67,9 @@ def main():
         converter.process_and_save()
     elif args.mode == "route":
         converter = MetaToRoute(result, exc=args.exc, dir=args.dir)
+        converter.process_and_save()
+    elif args.mode == "migrate":
+        converter = MetaToMigrate(result, exc=args.exc)
         converter.process_and_save()
     else:
         print("Invalid mode selected.")

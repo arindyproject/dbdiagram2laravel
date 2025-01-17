@@ -18,8 +18,8 @@ Class KTransaksiItemsResource extends JsonResource {
             "produk"       => $this->id_produk ? [ "id" => $this->produk->id , "name" => $this->produk->name ] : [], 
             "jumlah"       => $this->jumlah, 
             "harga"        => $this->harga, 
-            "created_at"   => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
-            "updated_at"   => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
+            "created_at"   => $this->created_at ? $this->created_at->format("Y-m-d h:i") : "", 
+            "updated_at"   => $this->updated_at ? $this->updated_at->format("Y-m-d h:i") : "", 
         ]; 
     } 
 } 

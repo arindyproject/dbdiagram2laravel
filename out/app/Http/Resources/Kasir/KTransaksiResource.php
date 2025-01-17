@@ -16,8 +16,8 @@ Class KTransaksiResource extends JsonResource {
             "id"          => $this->id, 
             "customer"    => $this->id_customer ? [ "id" => $this->customer->id , "name" => $this->customer->name ] : [], 
             "kasir"       => $this->id_kasir ? [ "id" => $this->kasir->id , "name" => $this->kasir->name ] : [], 
-            "created_at"  => $this->created_at ? $this->created_at->format("Y-m-d h:i:s") : "", 
-            "updated_at"  => $this->updated_at ? $this->updated_at->format("Y-m-d h:i:s") : "", 
+            "created_at"  => $this->created_at ? $this->created_at->format("Y-m-d h:i") : "", 
+            "updated_at"  => $this->updated_at ? $this->updated_at->format("Y-m-d h:i") : "", 
         ]; 
     } 
 } 

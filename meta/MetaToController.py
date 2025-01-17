@@ -79,7 +79,7 @@ class MetaToController:
             "date": lambda _: "date|date_format:Y-m-d",
             "datetime": lambda _: "date|date_format:Y-m-d H:i:s",
             "timestamp": lambda _: "date|date_format:Y-m-d H:i:s",
-            "time": lambda _: "date_format:H:i:s",
+            "time": lambda _: "date_format:H:i",
             "year": lambda _: "digits:4",
             "blob": lambda _: "file",
             "longblob": lambda _: "file",

@@ -8,9 +8,13 @@ return new class extends Migration{
     * Run the migrations. 
     */ 
     public function up(): void { 
-        Schema::create('k_kartu', function (Blueprint $table) { 
+        Schema::create('k_transaksi_items', function (Blueprint $table) { 
             $table->id(); 
             //-------------------------------------------------------
+            $table->unsignedBigInteger('id_transaksi'); 
+            $table->unsignedBigInteger('id_produk'); 
+            $table->integer('jumlah'); 
+            $table->decimal(10,2); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });
@@ -20,6 +24,6 @@ return new class extends Migration{
     * Reverse the migrations. 
     */ 
     public function down(): void { 
-        Schema::dropIfExists('k_kartu'); 
+        Schema::dropIfExists('k_transaksi_items'); 
     } 
 };
