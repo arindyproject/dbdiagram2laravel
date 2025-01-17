@@ -12,13 +12,13 @@ return new class extends Migration{
             $table->id(); 
             //-------------------------------------------------------
             $table->string('name'); 
-            $table->text('keterangan'); 
-            $table->decimal(10,2); 
-            $table->decimal(5,2); 
-            $table->decimal(5,2); 
-            $table->unsignedBigInteger('id_jenis'); 
-            $table->unsignedBigInteger('id_satuan'); 
-            $table->unsignedBigInteger('id_author'); 
+            $table->text('keterangan')->nullable(); 
+            $table->decimal('harga' ,10,2)->nullable(); 
+            $table->decimal('diskon' ,5,2)->nullable(); 
+            $table->decimal('ppn' ,5,2)->nullable(); 
+            $table->unsignedBigInteger('id_jenis')->nullable(); 
+            $table->unsignedBigInteger('id_satuan')->nullable(); 
+            $table->unsignedBigInteger('id_author')->nullable(); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });

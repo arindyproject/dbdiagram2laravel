@@ -14,7 +14,7 @@ return new class extends Migration{
             $table->unsignedBigInteger('id_transaksi'); 
             $table->unsignedBigInteger('id_produk'); 
             $table->integer('jumlah'); 
-            $table->decimal(10,2); 
+            $table->decimal('harga' ,10,2); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });

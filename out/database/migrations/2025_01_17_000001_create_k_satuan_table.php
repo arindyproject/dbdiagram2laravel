@@ -12,7 +12,7 @@ return new class extends Migration{
             $table->id(); 
             //-------------------------------------------------------
             $table->string('name'); 
-            $table->unsignedBigInteger('id_author'); 
+            $table->unsignedBigInteger('id_author')->nullable(); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });

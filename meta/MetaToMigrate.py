@@ -29,8 +29,24 @@ class MetaToMigrate:
                 return "integer('"+name+"')"
             elif('bigint' in type):
                 return "bigInteger('"+name+"')"
+            elif('timestamp' in type):
+                return "timestamp('"+name+"')"
+            elif('bool' in type):
+                return "boolean('"+name+"')"
+            elif('date' in type):
+                return "date('"+name+"')"
+            elif('time' in type):
+                return "time('"+name+"')"
+            elif('decimal' in type):
+                vv= type.replace("decimal(","").replace(")","") if "decimal(" in type else ""
+                vv= "," + vv if vv else ""
+                return "decimal('"+name+"' "+vv+")"
+            elif('float' in type):
+                vv= type.replace("float(","").replace(")","") if "float(" in type else ""
+                vv= "," + vv if vv else ""
+                return "float('"+name+"' "+vv+")"
             else:
-                return type
+                return type + "('"+name+"')"
     
 
     def json_to_model(self, table_data, refs_data):
@@ -57,7 +73,13 @@ class MetaToMigrate:
         
         for i in columns:
             if(i['name'] != "id" and i['name'] != "created_at" and i['name'] != "updated_at"):
-                mod+= "            $table->"+ self.check_type(i['type'], i['name']) + "; \n"
+                nll = "->nullable()" if i['null'] else ""
+                try:
+                    dff = "->default('"+i['default']+"')" 
+                except:
+                    dff = ""
+                    
+                mod+= "            $table->"+ self.check_type(i['type'], i['name']) + nll + dff + "; \n"
 
         
         #---------------------------------------------------------------------------

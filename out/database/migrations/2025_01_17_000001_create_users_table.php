@@ -8,13 +8,12 @@ return new class extends Migration{
     * Run the migrations. 
     */ 
     public function up(): void { 
-        Schema::create('k_customer', function (Blueprint $table) { 
+        Schema::create('users', function (Blueprint $table) { 
             $table->id(); 
             //-------------------------------------------------------
-            $table->string('name'); 
+            $table->string('name')->nullable()->default('bambang'); 
             $table->text('alamat')->nullable(); 
-            $table->string('no_tlp')->nullable(); 
-            $table->unsignedBigInteger('id_author')->nullable(); 
+            $table->unsignedBigInteger('id_kelamin')->nullable(); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });
@@ -24,6 +23,6 @@ return new class extends Migration{
     * Reverse the migrations. 
     */ 
     public function down(): void { 
-        Schema::dropIfExists('k_customer'); 
+        Schema::dropIfExists('users'); 
     } 
 };

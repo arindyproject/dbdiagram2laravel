@@ -19,7 +19,9 @@
                     "null": true,
                     "increment": false,
                     "attributes": "",
-                    "is_unique": false
+                    "is_unique": false,
+                    "primary": false,
+                    "default": "bambang"
                 },
                 {
                     "name": "alamat",

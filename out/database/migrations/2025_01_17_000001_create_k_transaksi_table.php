@@ -11,8 +11,8 @@ return new class extends Migration{
         Schema::create('k_transaksi', function (Blueprint $table) { 
             $table->id(); 
             //-------------------------------------------------------
-            $table->unsignedBigInteger('id_customer'); 
-            $table->unsignedBigInteger('id_kasir'); 
+            $table->unsignedBigInteger('id_customer')->nullable(); 
+            $table->unsignedBigInteger('id_kasir')->nullable(); 
             //-------------------------------------------------------
             $table->timestamps(); 
         });

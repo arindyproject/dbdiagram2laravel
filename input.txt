@@ -1,7 +1,7 @@
 
 Table users{
   id bigint [pk, increment]
-  name varchar
+  name varchar 
   alamat text [null]
   id_kelamin bigint [null]
 }
