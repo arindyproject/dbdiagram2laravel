@@ -48,6 +48,13 @@ class MetaToMigrate:
             else:
                 return type + "('"+name+"')"
     
+    def check_ref_in(self, ref, columns):
+        for i in columns:
+            if ref == i['name'] and i['type'] == 'bigint' and i['name'] != 'id':
+                return True
+            
+        return False
+    
 
     def json_to_model(self, table_data, refs_data):
         dir        = ( '\\' + table_data["dir"] ).replace('/','\\') if table_data["dir"] else ""
@@ -74,14 +81,26 @@ class MetaToMigrate:
         for i in columns:
             if(i['name'] != "id" and i['name'] != "created_at" and i['name'] != "updated_at"):
                 nll = "->nullable()" if i['null'] else ""
+                unq = "->unique()" if i['is_unique'] else ""
                 try:
                     dff = "->default('"+i['default']+"')" 
+
                 except:
                     dff = ""
                     
-                mod+= "            $table->"+ self.check_type(i['type'], i['name']) + nll + dff + "; \n"
+                mod+= "            $table->"+ self.check_type(i['type'], i['name']) + nll + dff + unq + "; \n"
 
         
+        #---------------------------------------------------------------------------
+        mod+= "            //-------------------------------------------------------\n"
+        #---------------------------------------------------------------------------
+        for i in refs_data:
+            if i["tb1"]["name"] == table_name or i["tb2"]["name"] == table_name:
+                #mod+= str(i) +'\n'
+                if(i["tb1"]["name"] == table_name and self.check_ref_in(i["tb1"]["ref"] , columns) ):
+                    mod+= "            $table->foreign('" +i["tb1"]["ref"]+ "')->references('"+i["tb2"]["ref"]+"')->on('"+i["tb2"]["name"]+"')->onDelete('"+i["att"]['delete']+"');\n"
+                elif(i["tb2"]["name"] == table_name and self.check_ref_in(i["tb2"]["ref"] , columns) ):
+                    mod+= "            $table->foreign('" +i["tb2"]["ref"]+ "')->references('"+i["tb1"]["ref"]+"')->on('"+i["tb1"]["name"]+"')->onDelete('"+i["att"]['delete']+"');\n"
         #---------------------------------------------------------------------------
         mod+= "            //-------------------------------------------------------\n"
         mod+= "            $table->timestamps(); \n"

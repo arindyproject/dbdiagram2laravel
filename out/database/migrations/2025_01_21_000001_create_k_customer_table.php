@@ -8,11 +8,15 @@ return new class extends Migration{
     * Run the migrations. 
     */ 
     public function up(): void { 
-        Schema::create('k_kartu', function (Blueprint $table) { 
+        Schema::create('k_customer', function (Blueprint $table) { 
             $table->id(); 
             //-------------------------------------------------------
-            $table->string('kode_member'); 
-            $table->unsignedBigInteger('id_user'); 
+            $table->string('name'); 
+            $table->text('alamat')->nullable(); 
+            $table->string('no_tlp')->nullable(); 
+            $table->unsignedBigInteger('id_author')->nullable(); 
+            //-------------------------------------------------------
+            $table->foreign('id_author')->references('id')->on('users')->onDelete('set null');
             //-------------------------------------------------------
             $table->timestamps(); 
         });
@@ -22,6 +26,6 @@ return new class extends Migration{
     * Reverse the migrations. 
     */ 
     public function down(): void { 
-        Schema::dropIfExists('k_kartu'); 
+        Schema::dropIfExists('k_customer'); 
     } 
 };

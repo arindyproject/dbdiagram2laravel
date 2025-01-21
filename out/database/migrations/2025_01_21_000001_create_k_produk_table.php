@@ -20,6 +20,10 @@ return new class extends Migration{
             $table->unsignedBigInteger('id_satuan')->nullable(); 
             $table->unsignedBigInteger('id_author')->nullable(); 
             //-------------------------------------------------------
+            $table->foreign('id_author')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('id_jenis')->references('id')->on('k_jenis')->onDelete('set null');
+            $table->foreign('id_satuan')->references('id')->on('k_satuan')->onDelete('set null');
+            //-------------------------------------------------------
             $table->timestamps(); 
         });
     } 

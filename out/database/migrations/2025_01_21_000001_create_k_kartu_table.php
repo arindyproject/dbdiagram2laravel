@@ -8,13 +8,13 @@ return new class extends Migration{
     * Run the migrations. 
     */ 
     public function up(): void { 
-        Schema::create('k_transaksi_items', function (Blueprint $table) { 
+        Schema::create('k_kartu', function (Blueprint $table) { 
             $table->id(); 
             //-------------------------------------------------------
-            $table->unsignedBigInteger('id_transaksi'); 
-            $table->unsignedBigInteger('id_produk'); 
-            $table->integer('jumlah'); 
-            $table->decimal('harga' ,10,2); 
+            $table->string('kode_member')->unique(); 
+            $table->unsignedBigInteger('id_user'); 
+            //-------------------------------------------------------
+            $table->foreign('id_user')->references('id')->on('k_customer')->onDelete('cascade');
             //-------------------------------------------------------
             $table->timestamps(); 
         });
@@ -24,6 +24,6 @@ return new class extends Migration{
     * Reverse the migrations. 
     */ 
     public function down(): void { 
-        Schema::dropIfExists('k_transaksi_items'); 
+        Schema::dropIfExists('k_kartu'); 
     } 
 };

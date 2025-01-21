@@ -14,6 +14,8 @@ return new class extends Migration{
             $table->string('name'); 
             $table->unsignedBigInteger('id_author')->nullable(); 
             //-------------------------------------------------------
+            $table->foreign('id_author')->references('id')->on('users')->onDelete('set null');
+            //-------------------------------------------------------
             $table->timestamps(); 
         });
     } 

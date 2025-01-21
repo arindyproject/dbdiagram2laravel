@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
   id bigint  UNSIGNED NOT NULL AUTO_INCREMENT,
-  name varchar(255)  NULL DEFAULT 'bambang',
+  name varchar(255)  NULL,
   alamat text  NULL,
   id_kelamin bigint  UNSIGNED NULL,
   PRIMARY KEY (id)
