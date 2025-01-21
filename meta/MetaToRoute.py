@@ -45,7 +45,7 @@ class MetaToRoute:
         mod += 'use Illuminate\Http\Request;\nuse Illuminate\Support\Facades\Route;\n\n'
 
         for i in table_data:
-            if(i['table'] != self.exc):
+            if(i['table'] not in self.exc):
                 mod +=f'//{i["table"]} -> {self.ubah_nama(i["table"])} \n'
                 mod += '//=========================================================================\n'
                 mod +=f'use {self.get_class_rel_dir(i)}{self.ubah_nama(i["table"])} ;\n'

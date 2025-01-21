@@ -41,10 +41,10 @@ def main():
         converter = MetaToRes(result, exc=args.exc)
         converter.process_and_save()
 
-        converter = MetaToController(result, exc=args.exc, dir=args.dir)
+        converter = MetaToController(result, exc=args.exc, dir=args.dir[0])
         converter.process_and_save()
 
-        converter = MetaToRoute(result, exc=args.exc, dir=args.dir)
+        converter = MetaToRoute(result, exc=args.exc, dir=args.dir[0])
         converter.process_and_save()
 
         converter = MetaToMigrate(result, exc=args.exc)
